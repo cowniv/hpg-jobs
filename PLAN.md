@@ -89,7 +89,14 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       brand to `getJobsFeed([brand])`. With 3 selects the filter grid needs re-balancing.
       TODO(client): all Apply emails go to info@helprofgrp.com until each brand gives a recruitment
       inbox (`JOB_APPLY_EMAIL` in content/careers.ts).*
-- [ ] **8. Roll out to HELPRO, DSSI, DSIC, GR8STAFF `/careers`** — each shows its own brand.
+- [x] **8. Roll out to HELPRO, DSSI, DSIC, GR8STAFF `/careers`** — each shows its own brand.
+      *Done: helpro#3, dssi#4, dsic + gr8staff PRs (2026-10-12). The board files are BYTE-IDENTICAL
+      in all five repos - `lib/jobs.ts`, `lib/job-format.ts`, `ui/JobExplorer|JobDetail|JobCard`,
+      `sections/JobBoard`, `tests/careers-jobs.spec.ts`; change one, copy to all. Per site:
+      `content/jobs.ts` (words), `--background-image-jobs-wash` (brand rgb; centre glow capped at
+      .07 - DSIC's green eyebrow was 4.30 at .12). Brand hero shows `hiring(n)` + "See Open Roles"
+      while the feed has roles, else the old talent-pool line. Grey text is `note`, not `muted`
+      (GR8STAFF's muted is 2.52).*
 
 ### Hand-off and hardening
 - [ ] **9. Robot access** — Google service account (read-only), sheet shared with it, pipeline
