@@ -1,0 +1,23 @@
+{
+  "name": "@helprof/hpg-jobs",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Reads the client's MR Google Sheet, validates it, and publishes the clean careers feed the five HPG sites read.",
+  "scripts": {
+    "sync": "tsx src/sync.ts",
+    "test": "node --import tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

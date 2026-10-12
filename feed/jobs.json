@@ -1,0 +1,1176 @@
+{
+  "schema": 1,
+  "generatedAt": "2026-10-12T08:30:50.556Z",
+  "brands": {
+    "helpro": {
+      "state": "live",
+      "jobs": 15,
+      "updatedAt": "2026-10-12T08:30:50.556Z"
+    },
+    "dssi": {
+      "state": "live",
+      "jobs": 4,
+      "updatedAt": "2026-10-12T08:30:50.556Z"
+    },
+    "dsic": {
+      "state": "live",
+      "jobs": 22,
+      "updatedAt": "2026-10-12T08:30:50.556Z"
+    },
+    "gr8staff": {
+      "state": "live",
+      "jobs": 1,
+      "updatedAt": "2026-10-12T08:30:50.556Z"
+    }
+  },
+  "categories": [
+    "Sales & Retail",
+    "Warehouse & Logistics",
+    "Driving & Delivery",
+    "Construction & Skilled Trades",
+    "Production & Manufacturing",
+    "Technical & Maintenance",
+    "Telecommunications",
+    "Office, HR & Admin",
+    "Security"
+  ],
+  "jobs": [
+    {
+      "id": "dsic-sales-promoter",
+      "brand": "dsic",
+      "title": "Sales Promoter",
+      "category": "Sales & Retail",
+      "areas": [
+        "Aklan",
+        "Albay",
+        "Bataan",
+        "Batangas",
+        "Benguet",
+        "Bicol",
+        "Bohol",
+        "Cagayan",
+        "Cagayan de Oro",
+        "Caloocan",
+        "Cavite",
+        "Cebu",
+        "Cotabato",
+        "Davao del Sur",
+        "Ilocos Norte",
+        "Ilocos Sur",
+        "Isabela",
+        "Laguna",
+        "Lanao del Norte",
+        "Las Piñas",
+        "Makati",
+        "Mandaluyong",
+        "Manila",
+        "Muntinlupa",
+        "Negros Oriental",
+        "Nueva Ecija",
+        "Occidental Mindoro",
+        "Pampanga",
+        "Pangasinan",
+        "Parañaque",
+        "Pasay",
+        "Pasig",
+        "Quezon",
+        "Quezon City",
+        "Rizal",
+        "San Juan",
+        "Sorsogon",
+        "South Cotabato",
+        "Tarlac",
+        "Zambales",
+        "Zamboanga del Norte"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 96,
+      "postedAt": "2026-06-09",
+      "summary": "Represent a brand on the store floor: help shoppers find the right product, demonstrate it, and turn interest into sales.",
+      "responsibilities": [
+        "Engage shoppers, explain product features and recommend the right fit",
+        "Keep displays stocked, tidy and correctly priced",
+        "Track daily sales and stock and report them to your coordinator",
+        "Run in-store promotions and product demos"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Confident talking to customers",
+        "Retail, sales or promo experience is an advantage",
+        "Willing to work retail shifts, weekends and holidays"
+      ]
+    },
+    {
+      "id": "dsic-warehouse-staff",
+      "brand": "dsic",
+      "title": "Warehouse Staff",
+      "category": "Warehouse & Logistics",
+      "areas": [
+        "Laguna"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 150,
+      "postedAt": "2026-06-08",
+      "summary": "Keep goods moving through the warehouse: pick, pack, sort and prepare orders accurately and on time.",
+      "responsibilities": [
+        "Pick, pack and sort items accurately",
+        "Prepare orders for dispatch, including labelling and sealing",
+        "Check items for quality and report discrepancies",
+        "Keep the work area clean, organised and safe"
+      ],
+      "lookingFor": [
+        "At least high school graduate, with complete pre-employment requirements",
+        "Able to do physical work and stand for long periods",
+        "Warehouse experience is an advantage",
+        "Willing to work shifts"
+      ]
+    },
+    {
+      "id": "dssi-delivery-driver",
+      "brand": "dssi",
+      "title": "Delivery Driver",
+      "category": "Driving & Delivery",
+      "areas": [
+        "Laguna",
+        "Pasig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 58,
+      "postedAt": "2026-06-05",
+      "summary": "Deliver goods to customers and businesses safely and on time, and represent the company at every drop-off.",
+      "responsibilities": [
+        "Drive and deliver items safely and on schedule",
+        "Check orders before and after delivery",
+        "Help load and unload the vehicle",
+        "Keep delivery documents complete and accurate"
+      ],
+      "lookingFor": [
+        "Valid professional driver's license with the right restriction code for the vehicle",
+        "Good knowledge of local routes",
+        "Driving or delivery experience is an advantage",
+        "At least high school graduate, with complete pre-employment requirements"
+      ]
+    },
+    {
+      "id": "dssi-warehouse-staff",
+      "brand": "dssi",
+      "title": "Warehouse Staff",
+      "category": "Warehouse & Logistics",
+      "areas": [
+        "Laguna"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": null,
+      "postedAt": "2026-06-04",
+      "summary": "Keep goods moving through the warehouse: pick, pack, sort and prepare orders accurately and on time.",
+      "responsibilities": [
+        "Pick, pack and sort items accurately",
+        "Prepare orders for dispatch, including labelling and sealing",
+        "Check items for quality and report discrepancies",
+        "Keep the work area clean, organised and safe"
+      ],
+      "lookingFor": [
+        "At least high school graduate, with complete pre-employment requirements",
+        "Able to do physical work and stand for long periods",
+        "Warehouse experience is an advantage",
+        "Willing to work shifts"
+      ]
+    },
+    {
+      "id": "dsic-bulldozer-operator-nc-ii",
+      "brand": "dsic",
+      "title": "Bulldozer Operator (NC II)",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-06-03",
+      "summary": "Operate a bulldozer safely for earthworks and site preparation on construction projects.",
+      "responsibilities": [
+        "Operate the bulldozer for clearing, grading and earthmoving",
+        "Do daily pre-operation checks and basic maintenance",
+        "Follow plans and the site engineer's instructions",
+        "Work safely around people and other equipment"
+      ],
+      "lookingFor": [
+        "TESDA NC II in Heavy Equipment Operation (Bulldozer)",
+        "Proven bulldozer operating experience",
+        "Safety-conscious",
+        "Willing to be deployed to the project site"
+      ]
+    },
+    {
+      "id": "dsic-carpenter",
+      "brand": "dsic",
+      "title": "Carpenter",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 12,
+      "postedAt": "2026-06-03",
+      "summary": "Build, install and repair formworks and wooden structures on construction projects.",
+      "responsibilities": [
+        "Build and install formworks, frames and fixtures",
+        "Read plans and take accurate measurements",
+        "Use and maintain carpentry hand and power tools",
+        "Follow safety standards on site"
+      ],
+      "lookingFor": [
+        "Proven carpentry experience; TESDA NC II is an advantage",
+        "Can read plans and measurements",
+        "Willing to be deployed to the project site",
+        "Follows safety procedures"
+      ]
+    },
+    {
+      "id": "dsic-civil-foreman-bridge-works",
+      "brand": "dsic",
+      "title": "Civil Foreman (Bridge Works)",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-06-03",
+      "summary": "Lead civil works crews on site, with experience in bridge construction.",
+      "responsibilities": [
+        "Plan and supervise daily civil works",
+        "Ensure work follows plans, specifications and quality standards",
+        "Coordinate manpower, materials and equipment",
+        "Enforce site safety and report progress"
+      ],
+      "lookingFor": [
+        "Experience as a civil works foreman, including bridge works",
+        "Can read structural and civil plans",
+        "Strong leadership of site crews",
+        "Willing to be deployed to the project site"
+      ]
+    },
+    {
+      "id": "dsic-construction-laborer",
+      "brand": "dsic",
+      "title": "Construction Laborer",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 200,
+      "postedAt": "2026-06-03",
+      "summary": "Support skilled trades on a construction site: moving materials, preparing work areas and keeping the site safe.",
+      "responsibilities": [
+        "Carry and prepare materials and tools",
+        "Assist carpenters, masons, steelmen and electricians",
+        "Keep the site clean, organised and safe",
+        "Follow safety rules and supervisor instructions"
+      ],
+      "lookingFor": [
+        "Able to do heavy physical work outdoors",
+        "Construction experience is an advantage",
+        "Willing to be deployed to the project site",
+        "Follows safety procedures"
+      ]
+    },
+    {
+      "id": "dsic-electrical-foreman",
+      "brand": "dsic",
+      "title": "Electrical Foreman",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-06-03",
+      "summary": "Lead the electrical crew on site: plan the work, supervise quality and keep the job safe and on schedule.",
+      "responsibilities": [
+        "Plan and assign daily electrical work",
+        "Supervise installation quality and compliance with the code",
+        "Coordinate with engineers and other trades",
+        "Enforce site safety and report progress"
+      ],
+      "lookingFor": [
+        "Several years of electrical work, with supervisory experience",
+        "Can read and interpret electrical plans",
+        "TESDA NC II or higher is an advantage",
+        "Willing to be deployed to the project site"
+      ]
+    },
+    {
+      "id": "dsic-electrician-nc-ii",
+      "brand": "dsic",
+      "title": "Electrician (NC II)",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 40,
+      "postedAt": "2026-06-03",
+      "summary": "Install, test and maintain electrical systems on construction projects to code.",
+      "responsibilities": [
+        "Install wiring, panels, lighting and fixtures",
+        "Test and troubleshoot electrical systems",
+        "Read electrical plans and follow the electrical code",
+        "Keep tools and work areas safe"
+      ],
+      "lookingFor": [
+        "TESDA NC II in Electrical Installation and Maintenance",
+        "Proven electrical work experience",
+        "Can read electrical plans",
+        "Willing to be deployed to the project site"
+      ]
+    },
+    {
+      "id": "dsic-electrician-helper",
+      "brand": "dsic",
+      "title": "Electrician Helper",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 30,
+      "postedAt": "2026-06-03",
+      "summary": "Assist licensed electricians with installation work while building your own skills on site.",
+      "responsibilities": [
+        "Prepare tools, cables and materials",
+        "Assist with pulling wire, mounting boxes and fixtures",
+        "Keep the work area clean and safe",
+        "Follow instructions from the electrician and foreman"
+      ],
+      "lookingFor": [
+        "Basic knowledge of electrical work",
+        "Electrical or construction experience is an advantage",
+        "Willing to learn and be deployed to the project site",
+        "Follows safety procedures"
+      ]
+    },
+    {
+      "id": "dsic-general-mechanic",
+      "brand": "dsic",
+      "title": "General Mechanic",
+      "category": "Technical & Maintenance",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 2,
+      "postedAt": "2026-06-03",
+      "summary": "Keep project vehicles and equipment running: inspect, service and repair them on site.",
+      "responsibilities": [
+        "Inspect, service and repair vehicles and equipment",
+        "Diagnose mechanical faults",
+        "Keep maintenance records",
+        "Follow safety and workshop procedures"
+      ],
+      "lookingFor": [
+        "Proven experience as a mechanic",
+        "Knowledge of engines and heavy equipment is an advantage",
+        "TESDA NC II is an advantage",
+        "Willing to be deployed to the project site"
+      ]
+    },
+    {
+      "id": "dsic-mason",
+      "brand": "dsic",
+      "title": "Mason",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 12,
+      "postedAt": "2026-06-03",
+      "summary": "Lay blocks, plaster and finish concrete work to specification on construction projects.",
+      "responsibilities": [
+        "Lay hollow blocks and bricks to line and level",
+        "Mix and apply mortar, plaster and concrete",
+        "Read plans and set out work accurately",
+        "Keep tools and the work area safe and clean"
+      ],
+      "lookingFor": [
+        "Proven masonry experience; TESDA NC II is an advantage",
+        "Can read plans and measurements",
+        "Willing to be deployed to the project site",
+        "Follows safety procedures"
+      ]
+    },
+    {
+      "id": "dsic-steelman",
+      "brand": "dsic",
+      "title": "Steelman",
+      "category": "Construction & Skilled Trades",
+      "areas": [
+        "Pampanga"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 12,
+      "postedAt": "2026-06-03",
+      "summary": "Cut, bend and tie reinforcing steel to plan for concrete structures.",
+      "responsibilities": [
+        "Cut, bend and install rebar to specification",
+        "Tie and secure reinforcement before concrete pours",
+        "Read structural plans and bar schedules",
+        "Follow safety standards on site"
+      ],
+      "lookingFor": [
+        "Proven experience as a steelman or rebar worker",
+        "Can read structural plans",
+        "Willing to be deployed to the project site",
+        "Follows safety procedures"
+      ]
+    },
+    {
+      "id": "dsic-delivery-driver",
+      "brand": "dsic",
+      "title": "Delivery Driver",
+      "category": "Driving & Delivery",
+      "areas": [
+        "Batangas",
+        "Cavite",
+        "Cebu",
+        "Isabela",
+        "Laguna",
+        "Leyte",
+        "Palawan",
+        "Pasig",
+        "Valenzuela"
+      ],
+      "jobType": "Project-based",
+      "openings": 75,
+      "postedAt": "2026-05-29",
+      "summary": "Deliver goods to customers and businesses safely and on time, and represent the company at every drop-off.",
+      "responsibilities": [
+        "Drive and deliver items safely and on schedule",
+        "Check orders before and after delivery",
+        "Help load and unload the vehicle",
+        "Keep delivery documents complete and accurate"
+      ],
+      "lookingFor": [
+        "Valid professional driver's license with the right restriction code for the vehicle",
+        "Good knowledge of local routes",
+        "Driving or delivery experience is an advantage",
+        "At least high school graduate, with complete pre-employment requirements"
+      ]
+    },
+    {
+      "id": "dsic-delivery-helper",
+      "brand": "dsic",
+      "title": "Delivery Helper",
+      "category": "Driving & Delivery",
+      "areas": [
+        "Laguna",
+        "Leyte",
+        "Pasig"
+      ],
+      "jobType": "Project-based",
+      "openings": 128,
+      "postedAt": "2026-05-29",
+      "summary": "Work alongside our drivers to load, secure and deliver goods safely and on time.",
+      "responsibilities": [
+        "Load, unload and secure cargo",
+        "Help check deliveries against documents",
+        "Assist customers at drop-off points",
+        "Keep the vehicle and cargo area organised"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Able to do physical work",
+        "Delivery or warehouse experience is an advantage",
+        "Reliable and willing to work early or long shifts"
+      ]
+    },
+    {
+      "id": "helpro-operations-assistant",
+      "brand": "helpro",
+      "title": "Operations Assistant",
+      "category": "Office, HR & Admin",
+      "areas": [
+        "Cebu",
+        "Davao de Oro",
+        "Iloilo",
+        "Pasig",
+        "Rizal"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": null,
+      "postedAt": "2026-05-26",
+      "summary": "Support the sales and operations team behind the scenes: orders, records and coordination with accounts in the field.",
+      "responsibilities": [
+        "Process orders and keep account records up to date",
+        "Coordinate with field sales, distributors and the warehouse",
+        "Prepare simple reports and track deliveries",
+        "Handle documents and day-to-day admin tasks"
+      ],
+      "lookingFor": [
+        "At least college level",
+        "Organised, accurate and good with spreadsheets",
+        "Experience in sales operations or distribution is an advantage",
+        "Clear communicator, comfortable on the phone"
+      ]
+    },
+    {
+      "id": "helpro-sales-account-specialist",
+      "brand": "helpro",
+      "title": "Sales Account Specialist",
+      "category": "Sales & Retail",
+      "areas": [
+        "Cebu",
+        "Davao de Oro",
+        "Iloilo",
+        "Pasig",
+        "Rizal"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": null,
+      "postedAt": "2026-05-26",
+      "summary": "Grow sales in your area by building strong relationships with distributors, dealers and retail accounts.",
+      "responsibilities": [
+        "Visit and manage distributor, dealer and retail accounts in your territory",
+        "Take orders and follow up on deliveries and collections",
+        "Find new accounts and grow existing ones",
+        "Report sales, market feedback and competitor activity"
+      ],
+      "lookingFor": [
+        "Sales experience, ideally in pet food, feeds, poultry supply, animal health or general trade",
+        "Proven relationships with distributors and dealers in your area",
+        "Self-driven and comfortable working in the field",
+        "Good negotiation and communication skills"
+      ]
+    },
+    {
+      "id": "dsic-production-staff",
+      "brand": "dsic",
+      "title": "Production Staff",
+      "category": "Production & Manufacturing",
+      "areas": [
+        "Laguna"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 25,
+      "postedAt": "2026-05-25",
+      "summary": "Work on a manufacturing line: operate equipment, assemble and pack products, and help the line hit its quality and output targets.",
+      "responsibilities": [
+        "Operate production equipment as trained",
+        "Assemble, inspect and pack products",
+        "Follow quality and safety procedures",
+        "Keep the workstation clean and organised"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Able to stand and do physical work for a full shift",
+        "Production or factory experience is an advantage",
+        "Willing to work rotating shifts"
+      ]
+    },
+    {
+      "id": "gr8staff-production-staff",
+      "brand": "gr8staff",
+      "title": "Production Staff",
+      "category": "Production & Manufacturing",
+      "areas": [
+        "Marikina"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-25",
+      "summary": "Work on a manufacturing line: operate equipment, assemble and pack products, and help the line hit its quality and output targets.",
+      "responsibilities": [
+        "Operate production equipment as trained",
+        "Assemble, inspect and pack products",
+        "Follow quality and safety procedures",
+        "Keep the workstation clean and organised"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Able to stand and do physical work for a full shift",
+        "Production or factory experience is an advantage",
+        "Willing to work rotating shifts"
+      ]
+    },
+    {
+      "id": "dsic-dispatch-checker",
+      "brand": "dsic",
+      "title": "Dispatch Checker",
+      "category": "Warehouse & Logistics",
+      "areas": [
+        "Pasig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 6,
+      "postedAt": "2026-05-18",
+      "summary": "Make sure every shipment that leaves or arrives is complete, correct and properly recorded.",
+      "responsibilities": [
+        "Check incoming and outgoing shipments against receipts and invoices",
+        "Verify product quantity, quality and condition",
+        "Record items accurately in the inventory system",
+        "Report discrepancies, damages or missing items"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Careful, detail-oriented and good with numbers",
+        "Warehouse or logistics experience is an advantage",
+        "Willing to work shifts"
+      ]
+    },
+    {
+      "id": "helpro-ftth-designer",
+      "brand": "helpro",
+      "title": "FTTH Designer",
+      "category": "Telecommunications",
+      "areas": [
+        "Abra",
+        "Aklan",
+        "Antique",
+        "Aurora",
+        "Bohol",
+        "Cagayan",
+        "Capiz",
+        "Ilocos Norte",
+        "Ilocos Sur",
+        "Leyte",
+        "Negros Oriental",
+        "Quirino",
+        "Samar"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 41,
+      "postedAt": "2026-05-18",
+      "summary": "Design fiber-to-the-home networks: survey routes and produce accurate network designs for build teams.",
+      "responsibilities": [
+        "Survey sites and plan fiber network routes",
+        "Prepare FTTH network designs and drawings",
+        "Coordinate with project and build teams",
+        "Keep design records and documentation up to date"
+      ],
+      "lookingFor": [
+        "Experience in FTTH or outside-plant (OSP) design",
+        "Familiar with design and mapping tools such as AutoCAD or GIS",
+        "Engineering or technical background is an advantage",
+        "Willing to be assigned to a provincial area"
+      ]
+    },
+    {
+      "id": "dsic-maintenance-staff",
+      "brand": "dsic",
+      "title": "Maintenance Staff",
+      "category": "Technical & Maintenance",
+      "areas": [
+        "Pasig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 7,
+      "postedAt": "2026-05-18",
+      "summary": "Keep the facility and its equipment in good working order through routine checks and repairs.",
+      "responsibilities": [
+        "Do routine inspections and preventive maintenance",
+        "Carry out basic electrical, plumbing and carpentry repairs",
+        "Report issues that need a specialist",
+        "Keep tools and maintenance records in order"
+      ],
+      "lookingFor": [
+        "Maintenance or general repair experience",
+        "Basic electrical, plumbing or carpentry skills",
+        "TESDA NC II is an advantage",
+        "Willing to work shifts"
+      ]
+    },
+    {
+      "id": "helpro-network-design-supervisor",
+      "brand": "helpro",
+      "title": "Network Design Supervisor",
+      "category": "Telecommunications",
+      "areas": [
+        "Cavite",
+        "Nueva Ecija"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 2,
+      "postedAt": "2026-05-18",
+      "summary": "Lead a team of FTTH designers and make sure network designs are accurate and delivered on time.",
+      "responsibilities": [
+        "Supervise and review the work of FTTH designers",
+        "Check designs against standards and project requirements",
+        "Coordinate with project managers and build teams",
+        "Track deliverables and report progress"
+      ],
+      "lookingFor": [
+        "FTTH or OSP design experience, with supervisory experience",
+        "Strong attention to detail",
+        "Engineering or technical background",
+        "Willing to be assigned to a provincial area"
+      ]
+    },
+    {
+      "id": "helpro-project-supervisor",
+      "brand": "helpro",
+      "title": "Project Supervisor",
+      "category": "Telecommunications",
+      "areas": [
+        "Batangas",
+        "Iloilo"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 4,
+      "postedAt": "2026-05-18",
+      "summary": "Oversee telecom network projects on the ground: crews, schedules, quality and safety.",
+      "responsibilities": [
+        "Supervise field crews and daily project work",
+        "Track progress against the schedule",
+        "Ensure quality and safety standards are met",
+        "Report progress and issues to project management"
+      ],
+      "lookingFor": [
+        "Experience supervising telecom or construction projects",
+        "Strong organisation and leadership",
+        "Engineering or technical background is an advantage",
+        "Willing to be assigned to a provincial area"
+      ]
+    },
+    {
+      "id": "dsic-sales-associate",
+      "brand": "dsic",
+      "title": "Sales Associate",
+      "category": "Sales & Retail",
+      "areas": [
+        "Bulacan",
+        "Makati",
+        "Mandaluyong"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 4,
+      "postedAt": "2026-05-18",
+      "summary": "Help customers in store, from finding the right product to the checkout, and keep the shop floor running smoothly.",
+      "responsibilities": [
+        "Assist and advise customers on products",
+        "Handle sales transactions accurately",
+        "Restock shelves and keep the store tidy",
+        "Help with stock counts and deliveries"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Good communication and customer service skills",
+        "Retail experience is an advantage",
+        "Willing to work shifts, weekends and holidays"
+      ]
+    },
+    {
+      "id": "dsic-service-technician-helper",
+      "brand": "dsic",
+      "title": "Service Technician Helper",
+      "category": "Technical & Maintenance",
+      "areas": [
+        "Makati",
+        "Pasig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 3,
+      "postedAt": "2026-05-18",
+      "summary": "Assist our after-sales technicians as they install, maintain and repair equipment at customer sites.",
+      "responsibilities": [
+        "Prepare tools, parts and materials for each job",
+        "Assist with installation, maintenance and repair work",
+        "Keep the work area clean and safe",
+        "Help record completed work and parts used"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Basic technical or mechanical skills",
+        "Technical-vocational training is an advantage",
+        "Willing to learn and travel to customer sites"
+      ]
+    },
+    {
+      "id": "helpro-site-acquisition-saq-officer",
+      "brand": "helpro",
+      "title": "Site Acquisition (SAQ) Officer",
+      "category": "Telecommunications",
+      "areas": [
+        "Laguna",
+        "Occidental Mindoro",
+        "Palawan"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 5,
+      "postedAt": "2026-05-18",
+      "summary": "Secure the sites and permits telecom projects need, working with landowners, LGUs and communities.",
+      "responsibilities": [
+        "Identify and negotiate with landowners for project sites",
+        "Secure permits and clearances from LGUs and agencies",
+        "Prepare and follow up site acquisition documents",
+        "Coordinate with project and legal teams"
+      ],
+      "lookingFor": [
+        "Site acquisition, permitting or similar field experience",
+        "Good negotiation and communication skills",
+        "Familiar with LGU permitting processes",
+        "Willing to be assigned to a provincial area"
+      ]
+    },
+    {
+      "id": "helpro-site-acquisition-saq-supervisor",
+      "brand": "helpro",
+      "title": "Site Acquisition (SAQ) Supervisor",
+      "category": "Telecommunications",
+      "areas": [
+        "Albay"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-18",
+      "summary": "Lead site acquisition officers and keep permits and site agreements on schedule.",
+      "responsibilities": [
+        "Supervise and support SAQ officers",
+        "Track site acquisition and permit progress",
+        "Handle difficult negotiations and escalations",
+        "Report status to project management"
+      ],
+      "lookingFor": [
+        "Site acquisition experience, with supervisory experience",
+        "Strong negotiation skills",
+        "Familiar with LGU permitting processes",
+        "Willing to be assigned to a provincial area"
+      ]
+    },
+    {
+      "id": "dsic-warehouse-admin",
+      "brand": "dsic",
+      "title": "Warehouse Admin",
+      "category": "Warehouse & Logistics",
+      "areas": [
+        "Pasig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 2,
+      "postedAt": "2026-05-18",
+      "summary": "Keep the warehouse's paperwork and stock records accurate so operations run without surprises.",
+      "responsibilities": [
+        "Encode receipts, issuances and stock movements",
+        "Reconcile inventory counts with system records",
+        "Prepare warehouse reports and documents",
+        "Coordinate with dispatch, receiving and logistics teams"
+      ],
+      "lookingFor": [
+        "At least college level",
+        "Good with spreadsheets and record-keeping",
+        "Warehouse or inventory admin experience is an advantage",
+        "Organised and accurate"
+      ]
+    },
+    {
+      "id": "helpro-accounting-specialist",
+      "brand": "helpro",
+      "title": "Accounting Specialist",
+      "category": "Office, HR & Admin",
+      "areas": [
+        "Quezon City"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-15",
+      "summary": "Keep the books accurate: record transactions, reconcile accounts and support reporting.",
+      "responsibilities": [
+        "Record and reconcile financial transactions",
+        "Prepare billing, payables and receivables",
+        "Support month-end closing and reports",
+        "Keep financial documents organised"
+      ],
+      "lookingFor": [
+        "Graduate of Accountancy or a related course",
+        "Accounting or bookkeeping experience",
+        "Good with spreadsheets and accounting systems",
+        "Accurate and detail-oriented"
+      ]
+    },
+    {
+      "id": "helpro-admin-coordinator",
+      "brand": "helpro",
+      "title": "Admin Coordinator",
+      "category": "Office, HR & Admin",
+      "areas": [
+        "Laguna"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-15",
+      "summary": "Keep an office or account running smoothly: coordination, records and day-to-day admin.",
+      "responsibilities": [
+        "Coordinate schedules, requests and documents",
+        "Maintain records and prepare simple reports",
+        "Act as a point of contact for staff and clients",
+        "Handle supplies and general admin tasks"
+      ],
+      "lookingFor": [
+        "At least college level",
+        "Organised and good with spreadsheets",
+        "Admin or coordination experience is an advantage",
+        "Clear communicator"
+      ]
+    },
+    {
+      "id": "dsic-brand-ambassador",
+      "brand": "dsic",
+      "title": "Brand Ambassador",
+      "category": "Sales & Retail",
+      "areas": [
+        "Manila",
+        "Quezon City",
+        "Taguig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 3,
+      "postedAt": "2026-05-15",
+      "summary": "Be the face of a brand in store: build product awareness, engage customers and help drive sales.",
+      "responsibilities": [
+        "Introduce and demonstrate products to shoppers",
+        "Support campaigns, sampling and in-store events",
+        "Keep the brand area presentable and well stocked",
+        "Report sales, feedback and competitor activity"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Friendly, outgoing and well spoken",
+        "Sales or promo experience is an advantage",
+        "Willing to work weekends and holidays"
+      ]
+    },
+    {
+      "id": "helpro-fragrance-consultant",
+      "brand": "helpro",
+      "title": "Fragrance Consultant",
+      "category": "Sales & Retail",
+      "areas": [
+        "Cavite",
+        "Cebu",
+        "Iloilo",
+        "Mandaluyong",
+        "Pampanga",
+        "Parañaque",
+        "Pasig",
+        "Taguig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 12,
+      "postedAt": "2026-05-15",
+      "summary": "Guide shoppers to the right fragrance at beauty and personal-care counters, and help the counter hit its sales targets.",
+      "responsibilities": [
+        "Recommend fragrances based on each customer's preference",
+        "Meet daily and monthly sales targets",
+        "Maintain counter stock, testers and displays",
+        "Submit sales and inventory reports"
+      ],
+      "lookingFor": [
+        "At least high school graduate, with complete pre-employment requirements",
+        "Warm, confident and customer-focused",
+        "Beauty, fragrance or retail sales experience is an advantage",
+        "Willing to start as soon as possible"
+      ]
+    },
+    {
+      "id": "helpro-hr-compensation-benefits-specialist",
+      "brand": "helpro",
+      "title": "HR Compensation & Benefits Specialist",
+      "category": "Office, HR & Admin",
+      "areas": [
+        "Quezon City"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-15",
+      "summary": "Make sure every employee is paid correctly and gets the benefits they're entitled to.",
+      "responsibilities": [
+        "Process payroll inputs and benefits",
+        "Handle SSS, PhilHealth and Pag-IBIG contributions and claims",
+        "Answer employee pay and benefits questions",
+        "Keep compensation records accurate and compliant"
+      ],
+      "lookingFor": [
+        "Graduate of HR, Accounting or a related course",
+        "Experience in payroll or compensation and benefits",
+        "Knowledge of Philippine statutory benefits",
+        "Accurate and good with numbers"
+      ]
+    },
+    {
+      "id": "helpro-hr-specialist",
+      "brand": "helpro",
+      "title": "HR Specialist",
+      "category": "Office, HR & Admin",
+      "areas": [
+        "Quezon City"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-15",
+      "summary": "Support the people side of the business: records, employee relations and HR processes.",
+      "responsibilities": [
+        "Maintain employee records and 201 files",
+        "Handle onboarding and employee concerns",
+        "Support HR policies and compliance",
+        "Prepare HR reports"
+      ],
+      "lookingFor": [
+        "Graduate of Psychology, HR or a related course",
+        "HR generalist experience",
+        "Knowledge of Philippine labor law",
+        "Organised and discreet"
+      ]
+    },
+    {
+      "id": "dsic-plumber",
+      "brand": "dsic",
+      "title": "Plumber",
+      "category": "Technical & Maintenance",
+      "areas": [
+        "Quezon City"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 2,
+      "postedAt": "2026-05-15",
+      "summary": "Install, maintain and repair water, drainage and plumbing systems.",
+      "responsibilities": [
+        "Install and repair pipes, fixtures and fittings",
+        "Find and fix leaks and blockages",
+        "Read plumbing plans",
+        "Keep tools and work areas safe and clean"
+      ],
+      "lookingFor": [
+        "Proven plumbing experience; TESDA NC II is an advantage",
+        "Can read plumbing plans",
+        "Able to do physical work",
+        "Follows safety procedures"
+      ]
+    },
+    {
+      "id": "helpro-recruitment-specialist",
+      "brand": "helpro",
+      "title": "Recruitment Specialist",
+      "category": "Office, HR & Admin",
+      "areas": [
+        "Quezon City"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-15",
+      "summary": "Find and screen the right people for our clients' manpower requests, from sourcing to endorsement.",
+      "responsibilities": [
+        "Source candidates through job boards, referrals and job fairs",
+        "Screen, interview and assess applicants",
+        "Endorse qualified candidates and follow up",
+        "Keep the applicant pool and records up to date"
+      ],
+      "lookingFor": [
+        "Graduate of Psychology, HR or a related course",
+        "Recruitment experience, ideally high-volume",
+        "Strong communication and people skills",
+        "Organised and able to handle several requests at once"
+      ]
+    },
+    {
+      "id": "helpro-security-officer",
+      "brand": "helpro",
+      "title": "Security Officer",
+      "category": "Security",
+      "areas": [
+        "Bulacan"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-15",
+      "summary": "Keep people, property and premises safe through patrols, access control and incident response.",
+      "responsibilities": [
+        "Control access and check visitors, vehicles and deliveries",
+        "Patrol the premises and report incidents",
+        "Respond to alarms and emergencies",
+        "Keep the security logbook up to date"
+      ],
+      "lookingFor": [
+        "Valid security guard license",
+        "Security experience is an advantage",
+        "Alert, responsible and calm under pressure",
+        "Willing to work shifts"
+      ]
+    },
+    {
+      "id": "helpro-senior-recruitment-specialist",
+      "brand": "helpro",
+      "title": "Senior Recruitment Specialist",
+      "category": "Office, HR & Admin",
+      "areas": [
+        "Quezon City"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-05-15",
+      "summary": "Lead recruitment for key accounts and help the team meet its hiring targets.",
+      "responsibilities": [
+        "Handle complex or high-volume manpower requests",
+        "Plan sourcing strategies for hard-to-fill roles",
+        "Coach and support junior recruiters",
+        "Track hiring metrics and report to management"
+      ],
+      "lookingFor": [
+        "Graduate of Psychology, HR or a related course",
+        "Several years of recruitment experience",
+        "Experience with high-volume or multi-site hiring",
+        "Strong leadership and communication skills"
+      ]
+    },
+    {
+      "id": "dssi-appliance-service-technician",
+      "brand": "dssi",
+      "title": "Appliance Service Technician",
+      "category": "Technical & Maintenance",
+      "areas": [
+        "Pasig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 8,
+      "postedAt": "2026-04-21",
+      "summary": "Install, test and repair home appliances and electronics as part of an after-sales service team.",
+      "responsibilities": [
+        "Install, test and repair appliances and electronic equipment",
+        "Diagnose faults using the right tools",
+        "Explain repairs and proper use to customers",
+        "Keep service reports accurate"
+      ],
+      "lookingFor": [
+        "Graduate of a 2- to 3-year electronics or related technical course",
+        "Experience with refrigeration, laundry or audio-visual appliances is an advantage",
+        "TESDA NC II is an advantage",
+        "Good with customers"
+      ]
+    },
+    {
+      "id": "dssi-utility-staff",
+      "brand": "dssi",
+      "title": "Utility Staff",
+      "category": "Technical & Maintenance",
+      "areas": [
+        "Pasig"
+      ],
+      "jobType": "Full-time (probationary)",
+      "openings": 1,
+      "postedAt": "2026-04-21",
+      "summary": "Keep the site and its facilities clean, safe and in good condition.",
+      "responsibilities": [
+        "Clean and maintain work areas, equipment and facilities",
+        "Do minor repairs and report bigger issues",
+        "Help move materials and set up areas",
+        "Follow safety and housekeeping standards"
+      ],
+      "lookingFor": [
+        "At least high school graduate",
+        "Able to do physical work",
+        "Housekeeping or maintenance experience is an advantage",
+        "Reliable and willing to work shifts"
+      ]
+    }
+  ]
+}
