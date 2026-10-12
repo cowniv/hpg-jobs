@@ -78,8 +78,17 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       Keepalive commit after 45 quiet days, as GitHub stops public schedules at 60.*
 
 ### Sites
-- [ ] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
+- [x] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
       remove the placeholder vacancies and testimonials (open item 4). Tests on a fixture feed.
+      *Done: cowniv/hpg PR #3. `lib/jobs.ts` (fetch + parse, revalidate 1800; build-time failure →
+      notice, revalidation failure → keeps last good page), `ui/JobExplorer` (URL is the state via
+      useSyncExternalStore - `?q= &company= &location= &type= &category= &job=`), `ui/JobDetail`,
+      `ui/JobCard`, `lib/job-format.ts`. Board moved under the hero on a new `bg-jobs-wash`; hero
+      counts from the feed. Tests assert invariants of ANY feed (live data), plus parser fixtures.
+      **For task 8, copy those five files + the wash token**; pass `companyFilter={false}` and the
+      brand to `getJobsFeed([brand])`. With 3 selects the filter grid needs re-balancing.
+      TODO(client): all Apply emails go to info@helprofgrp.com until each brand gives a recruitment
+      inbox (`JOB_APPLY_EMAIL` in content/careers.ts).*
 - [ ] **8. Roll out to HELPRO, DSSI, DSIC, GR8STAFF `/careers`** — each shows its own brand.
 
 ### Hand-off and hardening
