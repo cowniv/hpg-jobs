@@ -70,8 +70,12 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       Problem messages never quote a client name (Action logs on a public repo are public). A
       sign-in page instead of an xlsx (sheet unshared) fails the run and leaves the feed alone.
       Fixed on the way: a restored "ñ" stopped ALL-CAPS areas being title-cased.*
-- [ ] **6. GitHub Action** — cron every 30 min + manual run; commits the feed only when it
+- [x] **6. GitHub Action** — cron every 30 min + manual run; commits the feed only when it
       changed; secret `MR_SHEET_ID`. Push the repo to `cowniv/hpg-jobs` (public).
+      *Done: `.github/workflows/sync.yml` (:07 and :37). First manual run green against the live
+      sheet. Sites read **`https://raw.githubusercontent.com/cowniv/hpg-jobs/main/feed/jobs.json`**.
+      A failed run emails the repo owner (GitHub default) until task 10 adds the report emails.
+      Keepalive commit after 45 quiet days, as GitHub stops public schedules at 60.*
 
 ### Sites
 - [ ] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
