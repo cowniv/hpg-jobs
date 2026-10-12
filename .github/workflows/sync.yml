@@ -1,0 +1,76 @@
+# Reads the MR sheet every 30 minutes and republishes feed/jobs.json when the
+# open roles changed. The sites fetch that file; they never touch the sheet.
+#
+# Secrets (Settings > Secrets and variables > Actions):
+#   MR_SHEET_ID   the sheet's id - never commit it; this repo is public
+#
+# Run it by hand from the Actions tab ("Run workflow"); "accept_drop" releases a
+# brand the big-drop guard held back (see report in the run summary).
+name: sync
+
+on:
+  schedule:
+    - cron: '7,37 * * * *' # off the hour: GitHub delays jobs queued at :00
+  workflow_dispatch:
+    inputs:
+      accept_drop:
+        description: 'Brands whose big drop is real, comma-separated (helpro,dssi,dsic,gr8staff)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
+      - name: Sync
+        id: sync
+        run: npm run sync
+        env:
+          MR_SHEET_ID: ${{ secrets.MR_SHEET_ID }}
+          ACCEPT_DROP: ${{ inputs.accept_drop }}
+
+      - name: Publish the feed if it changed
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          git config user.name 'hpg-jobs bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add feed/jobs.json
+          git commit -m 'Update open roles from the MR sheet'
+          git push
+
+      # GitHub switches off a public repo's schedule after 60 days without a
+      # commit. A quiet month on the sheet must not stop the sync.
+      - name: Keep the schedule alive
+        if: steps.sync.outputs.changed != 'true'
+        run: |
+          last=$(git log -1 --format=%ct)
+          if [ $(( $(date +%s) - last )) -gt $(( 45 * 86400 )) ]; then
+            git config user.name 'hpg-jobs bot'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit --allow-empty -m 'Keep the sync schedule alive'
+            git push
+          fi
+
+      # Task 10 (PLAN.md): email report.md to Jasmin + the recruitment lead
+      # when steps.sync.outputs.attention == 'true'.

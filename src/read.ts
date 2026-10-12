@@ -37,6 +37,9 @@ const HEADERS: Record<string, Field> = {
 /** A tab can't be trusted without these. Missing any => the whole tab is held back. */
 const REQUIRED: Field[] = ['title', 'status', 'area', 'jobType']
 
+/** CLIENTS values that are placeholders, not clients - blocking them would blank ordinary words. */
+const NOT_A_CLIENT = new Set(['INTERNAL', 'IN-HOUSE', 'IN HOUSE', 'N/A', 'NA', 'NONE', 'TBA', 'TBD'])
+
 export function normHeader(h: string): string {
   return h.split('\n')[0]!.replace(/\(.*?\)/g, '').replace(/\s+/g, ' ').trim().toUpperCase()
 }
@@ -129,7 +132,7 @@ export async function readWorkbook(buf: ArrayBuffer | Buffer): Promise<ReadResul
       const [b1, b2] = blockOf(row)
       const status = get(b1, 'status')
       const client = get(b1, 'client')
-      if (client) for (const c of client.split(/[\n/,]+/)) if (c.trim().length >= 3) clientNames.add(c.trim())
+      if (client) for (const c of client.split(/[\n/,]+/)) if (c.trim().length >= 3 && !NOT_A_CLIENT.has(c.trim().toUpperCase())) clientNames.add(c.trim())
       // a block needs a status; a status-less, title-less row is just spacing
       const rows: number[] = []
       for (let r = b1; r <= b2; r++) rows.push(r)
