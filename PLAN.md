@@ -70,13 +70,40 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       Problem messages never quote a client name (Action logs on a public repo are public). A
       sign-in page instead of an xlsx (sheet unshared) fails the run and leaves the feed alone.
       Fixed on the way: a restored "ñ" stopped ALL-CAPS areas being title-cased.*
-- [ ] **6. GitHub Action** — cron every 30 min + manual run; commits the feed only when it
+- [x] **6. GitHub Action** — cron every 30 min + manual run; commits the feed only when it
       changed; secret `MR_SHEET_ID`. Push the repo to `cowniv/hpg-jobs` (public).
+      *Done: `.github/workflows/sync.yml` (:07 and :37). First manual run green against the live
+      sheet. Sites read **`https://raw.githubusercontent.com/cowniv/hpg-jobs/main/feed/jobs.json`**.
+      A failed run emails the repo owner (GitHub default) until task 10 adds the report emails.
+      Keepalive commit after 45 quiet days, as GitHub stops public schedules at 60.*
+
+- [ ] **6b. Reliable timer** — GitHub ran the "every 30 min" schedule only **twice in 23 hours**
+      (2026-10-12 08:34 → 2026-10-13 07:37 UTC; schedules on free repos are best-effort). Trigger
+      the workflow from outside instead: a free cron-job.org job every 30 min calling
+      `POST /repos/cowniv/hpg-jobs/actions/workflows/sync.yml/dispatches` with a fine-grained token
+      (this repo only, Actions: read & write). Keep the GitHub cron as a backup.
+      *Needs Jasmin: a cron-job.org account (free) and the token - or pick another timer.*
 
 ### Sites
-- [ ] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
+- [x] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
       remove the placeholder vacancies and testimonials (open item 4). Tests on a fixture feed.
-- [ ] **8. Roll out to HELPRO, DSSI, DSIC, GR8STAFF `/careers`** — each shows its own brand.
+      *Done: cowniv/hpg PR #3. `lib/jobs.ts` (fetch + parse, revalidate 1800; build-time failure →
+      notice, revalidation failure → keeps last good page), `ui/JobExplorer` (URL is the state via
+      useSyncExternalStore - `?q= &company= &location= &type= &category= &job=`), `ui/JobDetail`,
+      `ui/JobCard`, `lib/job-format.ts`. Board moved under the hero on a new `bg-jobs-wash`; hero
+      counts from the feed. Tests assert invariants of ANY feed (live data), plus parser fixtures.
+      **For task 8, copy those five files + the wash token**; pass `companyFilter={false}` and the
+      brand to `getJobsFeed([brand])`. With 3 selects the filter grid needs re-balancing.
+      TODO(client): all Apply emails go to info@helprofgrp.com until each brand gives a recruitment
+      inbox (`JOB_APPLY_EMAIL` in content/careers.ts).*
+- [x] **8. Roll out to HELPRO, DSSI, DSIC, GR8STAFF `/careers`** — each shows its own brand.
+      *Done: helpro#3, dssi#4, dsic + gr8staff PRs (2026-10-12). The board files are BYTE-IDENTICAL
+      in all five repos - `lib/jobs.ts`, `lib/job-format.ts`, `ui/JobExplorer|JobDetail|JobCard`,
+      `sections/JobBoard`, `tests/careers-jobs.spec.ts`; change one, copy to all. Per site:
+      `content/jobs.ts` (words), `--background-image-jobs-wash` (brand rgb; centre glow capped at
+      .07 - DSIC's green eyebrow was 4.30 at .12). Brand hero shows `hiring(n)` + "See Open Roles"
+      while the feed has roles, else the old talent-pool line. Grey text is `note`, not `muted`
+      (GR8STAFF's muted is 2.52).*
 
 ### Hand-off and hardening
 - [ ] **9. Robot access** — Google service account (read-only), sheet shared with it, pipeline
@@ -85,8 +112,11 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
 - [ ] **10. Alert emails** — on problems, email Jasmin + the client's recruitment lead (who sees
       what is skipped and why). *Needs: the lead's email address, and a sender (Gmail app
       password or Resend free tier).*
-- [ ] **11. Client guide** — one page: how a role appears on the site, what is never shown, the
+- [x] **11. Client guide** — one page: how a role appears on the site, what is never shown, the
       optional dropdown/number validation to add to the sheet, what the alert emails mean.
+      *Done 2026-10-13 as a shareable doc: https://claude.ai/code/artifact/6ce2aab0-f229-477c-bcac-ce78bfd006d5
+      It promises changes "usually within an hour" and alert emails "coming soon" - both depend on
+      6b and 10, so finish those before it goes to the client.*
 - [ ] **12. Workspace wiring** — add `hpg-jobs` to `helprof-brand/workspace/setup.*` and the
       routing table; record the decisions in `helprof-brand/CLAUDE.md` (open item 4 closes).
 
