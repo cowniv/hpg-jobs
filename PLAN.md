@@ -77,6 +77,13 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       A failed run emails the repo owner (GitHub default) until task 10 adds the report emails.
       Keepalive commit after 45 quiet days, as GitHub stops public schedules at 60.*
 
+- [ ] **6b. Reliable timer** — GitHub ran the "every 30 min" schedule only **twice in 23 hours**
+      (2026-10-12 08:34 → 2026-10-13 07:37 UTC; schedules on free repos are best-effort). Trigger
+      the workflow from outside instead: a free cron-job.org job every 30 min calling
+      `POST /repos/cowniv/hpg-jobs/actions/workflows/sync.yml/dispatches` with a fine-grained token
+      (this repo only, Actions: read & write). Keep the GitHub cron as a backup.
+      *Needs Jasmin: a cron-job.org account (free) and the token - or pick another timer.*
+
 ### Sites
 - [x] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
       remove the placeholder vacancies and testimonials (open item 4). Tests on a fixture feed.
@@ -105,8 +112,11 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
 - [ ] **10. Alert emails** — on problems, email Jasmin + the client's recruitment lead (who sees
       what is skipped and why). *Needs: the lead's email address, and a sender (Gmail app
       password or Resend free tier).*
-- [ ] **11. Client guide** — one page: how a role appears on the site, what is never shown, the
+- [x] **11. Client guide** — one page: how a role appears on the site, what is never shown, the
       optional dropdown/number validation to add to the sheet, what the alert emails mean.
+      *Done 2026-10-13 as a shareable doc: https://claude.ai/code/artifact/6ce2aab0-f229-477c-bcac-ce78bfd006d5
+      It promises changes "usually within an hour" and alert emails "coming soon" - both depend on
+      6b and 10, so finish those before it goes to the client.*
 - [ ] **12. Workspace wiring** — add `hpg-jobs` to `helprof-brand/workspace/setup.*` and the
       routing table; record the decisions in `helprof-brand/CLAUDE.md` (open item 4 closes).
 
