@@ -4,12 +4,15 @@ import { loadCopy, type CopyFile } from './copy.ts'
 import { buildFeed, feedProblem, sameContent, type Feed } from './feed.ts'
 import { normalize } from './normalize.ts'
 import { readWorkbook } from './read.ts'
+import { download } from './source.ts'
 import { BRANDS, TAB, type Brand, type Problem } from './types.ts'
 
 /**
  * npm run sync
  *
  *   MR_SHEET_ID   the Google Sheet id (an Actions secret - never commit it)
+ *   GOOGLE_SA_KEY optional: the read-only service account's JSON key (task 9);
+ *                 without it the sheet's public link is used
  *   MR_XLSX       or: a local .xlsx to read instead (testing)
  *   ACCEPT_DROP   comma-separated brands whose big drop a person has confirmed, e.g. "dssi"
  *
@@ -20,17 +23,6 @@ import { BRANDS, TAB, type Brand, type Problem } from './types.ts'
 
 const FEED = 'feed/jobs.json'
 const REPORT = 'report.md'
-
-async function source(): Promise<Buffer> {
-  if (process.env.MR_XLSX) return readFileSync(process.env.MR_XLSX)
-  const id = process.env.MR_SHEET_ID
-  if (!id) throw new Error('Set MR_SHEET_ID (or MR_XLSX for a local file).')
-  const res = await fetch(`https://docs.google.com/spreadsheets/d/${encodeURIComponent(id)}/export?format=xlsx`, { redirect: 'follow' })
-  const type = res.headers.get('content-type') ?? ''
-  // a sheet that is no longer shared answers 200 with a Google sign-in PAGE, not an error
-  if (!res.ok || !type.includes('spreadsheetml')) throw new Error(`Could not download the MR sheet (HTTP ${res.status}, ${type || 'no type'}). Is it still shared "anyone with the link", or has the robot lost access?`)
-  return Buffer.from(await res.arrayBuffer())
-}
 
 function previousFeed(): Feed | null {
   if (!existsSync(FEED)) return null
@@ -55,7 +47,7 @@ function report(problems: Problem[], needsCopy: Array<{ brand: Brand; title: str
 async function main() {
   const copy = loadCopy(JSON.parse(readFileSync('copy/roles.json', 'utf8')) as CopyFile)
   const previous = previousFeed()
-  const read = await readWorkbook(await source())
+  const read = await readWorkbook(await download(process.env))
   const norm = normalize(read.lines, read.clientNames)
   const acceptDrop = (process.env.ACCEPT_DROP ?? '').split(',').map((s) => s.trim().toLowerCase()).filter((s): s is Brand => (BRANDS as readonly string[]).includes(s))
   const built = buildFeed({ jobs: norm.jobs, held: read.held, copy, previous, now: new Date().toISOString(), acceptDrop })
