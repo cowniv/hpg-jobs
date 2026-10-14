@@ -13,7 +13,7 @@ import { deliverFailureAlert, ERROR_FILE, loadState, mailerFromEnv, runUrl, save
 async function main() {
   const error = existsSync(ERROR_FILE)
     ? readFileSync(ERROR_FILE, 'utf8').trim()
-    : 'The run stopped before the sync finished (an earlier step such as the tests failed). See the run log.'
+    : 'The run failed outside the sync itself (an earlier step such as the tests, or publishing the feed). See the run log.'
   const res = await deliverFailureAlert({ env: process.env, state: loadState(), error, mailer: mailerFromEnv(process.env), now: new Date(), runUrl: runUrl(process.env) })
   if (res.changed) saveState(res.state)
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `alert_state=${res.changed}\n`)

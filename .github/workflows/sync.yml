@@ -1,8 +1,19 @@
 # Reads the MR sheet every 30 minutes and republishes feed/jobs.json when the
 # open roles changed. The sites fetch that file; they never touch the sheet.
 #
-# Secrets (Settings > Secrets and variables > Actions):
-#   MR_SHEET_ID   the sheet's id - never commit it; this repo is public
+# Secrets (Settings > Secrets and variables > Actions). Only MR_SHEET_ID is
+# required; every other one switches a feature on and is ignored when unset.
+# README "What Jasmin needs to set up" has the steps.
+#   MR_SHEET_ID     the sheet's id - never commit it; this repo is public
+#   GOOGLE_SA_KEY   task 9: read the sheet as the read-only service account
+#   ALERT_TO        task 10: who gets the sheet-problem emails (comma-separated)
+#   ALERT_TO_TEAM   task 10: who also gets the developer detail and failures
+#   SMTP_USER, SMTP_PASS        task 10 sender: Gmail address + app password
+#   RESEND_API_KEY, ALERT_FROM  task 10 sender, alternative: Resend
+#
+# Task 6b: an outside timer (cron-job.org) calls workflow_dispatch every 30
+# minutes; the schedule below stays as the backup. The concurrency group makes
+# sure the two never run at once.
 #
 # Run it by hand from the Actions tab ("Run workflow"); "accept_drop" releases a
 # brand the big-drop guard held back (see report in the run summary).
@@ -21,6 +32,9 @@ on:
 permissions:
   contents: write
 
+# One sync at a time: the outside timer and the backup cron can fire together.
+# A run that arrives while one is going waits (it is not cancelled), and
+# GitHub keeps at most one waiting, so they cannot pile up.
 concurrency:
   group: sync
   cancel-in-progress: false
@@ -49,14 +63,29 @@ jobs:
         env:
           MR_SHEET_ID: ${{ secrets.MR_SHEET_ID }}
           ACCEPT_DROP: ${{ inputs.accept_drop }}
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+          ALERT_TO: ${{ secrets.ALERT_TO }}
+          ALERT_TO_TEAM: ${{ secrets.ALERT_TO_TEAM }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_FROM: ${{ secrets.ALERT_FROM }}
 
-      - name: Publish the feed if it changed
-        if: steps.sync.outputs.changed == 'true'
+      # feed/alert-state.json records which problems were already emailed (a
+      # hash, no text), so the next run does not email them again.
+      - name: Publish the feed and alert state if they changed
+        if: steps.sync.outputs.changed == 'true' || steps.sync.outputs.alert_state == 'true'
         run: |
           git config user.name 'hpg-jobs bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add feed/jobs.json
-          git commit -m 'Update open roles from the MR sheet'
+          if [ '${{ steps.sync.outputs.changed }}' = 'true' ]; then
+            git add feed/jobs.json
+            msg='Update open roles from the MR sheet'
+          else
+            msg='Record the alert emails sent'
+          fi
+          if [ '${{ steps.sync.outputs.alert_state }}' = 'true' ]; then git add feed/alert-state.json; fi
+          git commit -m "$msg"
           git push
 
       # GitHub switches off a public repo's schedule after 60 days without a
@@ -72,5 +101,25 @@ jobs:
             git push
           fi
 
-      # Task 10 (PLAN.md): email report.md to Jasmin + the recruitment lead
-      # when steps.sync.outputs.attention == 'true'.
+      # The sync (or a step before it) failed: the sheet unshared, a sign-in
+      # page instead of the xlsx, a bad secret. Tell ALERT_TO_TEAM - once per
+      # distinct error, then weekly - and record that so the next run doesn't.
+      - name: Email the team that the sync failed
+        id: failalert
+        if: failure()
+        run: npm run alert:failure || echo 'Could not run the failure alert.'
+        env:
+          ALERT_TO_TEAM: ${{ secrets.ALERT_TO_TEAM }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_FROM: ${{ secrets.ALERT_FROM }}
+
+      - name: Record the failure alert
+        if: failure() && steps.failalert.outputs.alert_state == 'true'
+        run: |
+          git config user.name 'hpg-jobs bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add feed/alert-state.json
+          git commit -m 'Record the sync-failure alert sent'
+          git push
