@@ -1,5 +1,6 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
+import { deliverSyncAlerts, ERROR_FILE, loadState, mailerFromEnv, runUrl, saveState } from './alert.ts'
 import { loadCopy, type CopyFile } from './copy.ts'
 import { buildFeed, feedProblem, sameContent, type Feed } from './feed.ts'
 import { normalize } from './normalize.ts'
@@ -15,10 +16,14 @@ import { BRANDS, TAB, type Brand, type Problem } from './types.ts'
  *                 without it the sheet's public link is used
  *   MR_XLSX       or: a local .xlsx to read instead (testing)
  *   ACCEPT_DROP   comma-separated brands whose big drop a person has confirmed, e.g. "dssi"
+ *   ALERT_TO, ALERT_TO_TEAM, SMTP_USER + SMTP_PASS or RESEND_API_KEY + ALERT_FROM
+ *                 optional: alert emails (task 10, see alert.ts). Unset = no email.
  *
  * Writes feed/jobs.json only when the jobs actually changed, and report.md
- * (gitignored) for the alert step. A failed download changes nothing: the
- * sites keep reading the last good feed.
+ * (gitignored). Emails the problems when they changed, recording that in
+ * feed/alert-state.json. A failed run changes nothing: the sites keep reading
+ * the last good feed, and the error is left in .cache/sync-error.txt for the
+ * workflow's failure email (alert-failure.ts).
  */
 
 const FEED = 'feed/jobs.json'
@@ -45,6 +50,7 @@ function report(problems: Problem[], needsCopy: Array<{ brand: Brand; title: str
 }
 
 async function main() {
+  rmSync(ERROR_FILE, { force: true })
   const copy = loadCopy(JSON.parse(readFileSync('copy/roles.json', 'utf8')) as CopyFile)
   const previous = previousFeed()
   const read = await readWorkbook(await download(process.env))
@@ -61,14 +67,31 @@ async function main() {
   const md = report(problems, built.needsCopy, built.feed, changed)
   writeFileSync(REPORT, md)
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, md)
+  console.log(md)
+
+  const alerts = await deliverSyncAlerts({
+    env: process.env,
+    state: loadState(),
+    findings: { problems, needsCopy: built.needsCopy, runUrl: runUrl(process.env) },
+    mailer: mailerFromEnv(process.env),
+    now: new Date(),
+  })
+  if (alerts.changed) saveState(alerts.state)
+
   if (process.env.GITHUB_OUTPUT) {
     const needsAttention = problems.some((p) => p.level !== 'fixed')
-    appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\nattention=${needsAttention}\n`)
+    appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\nattention=${needsAttention}\nalert_state=${alerts.changed}\n`)
   }
-  console.log(md)
 }
 
 main().catch((e: unknown) => {
-  console.error(e instanceof Error ? e.message : e)
+  const message = e instanceof Error ? e.message : String(e)
+  console.error(message)
+  try {
+    mkdirSync(dirname(ERROR_FILE), { recursive: true })
+    writeFileSync(ERROR_FILE, message + '\n')
+  } catch {
+    // the failure email falls back to a generic message
+  }
   process.exit(1)
 })
