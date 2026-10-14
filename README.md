@@ -100,8 +100,11 @@ error (then weekly), and gets "working again" after the next good run.
 
 GitHub runs a free repo's schedule when it gets round to it - twice in 23 hours, once. So an
 outside timer starts the workflow every 30 minutes, and the GitHub schedule stays as a backup. The
-workflow's `concurrency` group means the two can never run at the same time (a second run waits;
-it is not cancelled, and at most one waits).
+workflow's `concurrency` group means the two can never run at the same time: a run that arrives
+while one is going waits, and GitHub keeps at most one waiting (a newer arrival replaces it, which
+shows as a cancelled run - harmless). The outside timer fires at :00/:30 and the backup at :07/:37,
+so they do not collide. Once the outside timer has run reliably for a week or two, the backup can
+be slowed to `'7 */2 * * *'` in `.github/workflows/sync.yml`; it is not needed every 30 minutes.
 
 1. **Make a token.** GitHub > Settings > Developer settings > Personal access tokens >
    **Fine-grained tokens** > Generate new token. Name `cron-job.org hpg-jobs`; expiration: the
@@ -111,7 +114,8 @@ it is not cancelled, and at most one waits).
 2. **Make the job.** Sign up free at <https://cron-job.org> > Create cronjob:
    - Title: `hpg-jobs sync`
    - URL: `https://api.github.com/repos/cowniv/hpg-jobs/actions/workflows/sync.yml/dispatches`
-   - Schedule: every 30 minutes (custom: minutes `7,37` of every hour - off the hour, like the backup)
+   - Schedule: every 30 minutes (custom: minutes `0,30` of every hour). Not `7,37`: that is the
+     backup's slot, and the two would land together and run back to back for nothing.
    - Advanced > Request method: **POST**
    - Headers:
      - `Accept: application/vnd.github+json`

@@ -11,9 +11,9 @@
 #   SMTP_USER, SMTP_PASS        task 10 sender: Gmail address + app password
 #   RESEND_API_KEY, ALERT_FROM  task 10 sender, alternative: Resend
 #
-# Task 6b: an outside timer (cron-job.org) calls workflow_dispatch every 30
-# minutes; the schedule below stays as the backup. The concurrency group makes
-# sure the two never run at once.
+# Task 6b: an outside timer (cron-job.org) calls workflow_dispatch at :00 and
+# :30; the schedule below (:07/:37) stays as the backup, offset so the two do
+# not land together. The concurrency group makes sure they never run at once.
 #
 # Run it by hand from the Actions tab ("Run workflow"); "accept_drop" releases a
 # brand the big-drop guard held back (see report in the run summary).
@@ -73,6 +73,10 @@ jobs:
 
       # feed/alert-state.json records which problems were already emailed (a
       # hash, no text), so the next run does not email them again.
+      # Every push in this job rebases first: main may have moved during the
+      # run (a merged PR, a copy edit). Without it the push is refused, the
+      # record of an email already sent is lost, and the next run sends it
+      # again. Only the bot writes feed/, so the rebase does not conflict there.
       - name: Publish the feed and alert state if they changed
         if: steps.sync.outputs.changed == 'true' || steps.sync.outputs.alert_state == 'true'
         run: |
@@ -86,6 +90,7 @@ jobs:
           fi
           if [ '${{ steps.sync.outputs.alert_state }}' = 'true' ]; then git add feed/alert-state.json; fi
           git commit -m "$msg"
+          git pull --rebase --autostash origin main
           git push
 
       # GitHub switches off a public repo's schedule after 60 days without a
@@ -98,6 +103,7 @@ jobs:
             git config user.name 'hpg-jobs bot'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git commit --allow-empty -m 'Keep the sync schedule alive'
+            git pull --rebase --autostash origin main
             git push
           fi
 
@@ -122,4 +128,5 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add feed/alert-state.json
           git commit -m 'Record the sync-failure alert sent'
+          git pull --rebase --autostash origin main
           git push

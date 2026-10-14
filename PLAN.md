@@ -86,7 +86,7 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       *Code ready (2026-10-14, branch `claude/alerts-and-robot-access`): `workflow_dispatch` was
       already there, and the existing `concurrency: sync` group (no cancel) keeps the outside timer
       and the backup cron from overlapping. README "A reliable timer" has the exact cron-job.org +
-      token steps. Remains: only the account, the token and the job.*
+      token steps; the outside timer runs at :00/:30, off the backup's :07/:37. Remains: only the account, the token and the job.*
 
 ### Sites
 - [x] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
