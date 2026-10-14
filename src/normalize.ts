@@ -142,6 +142,17 @@ function leaksClient(text: string, clients: Set<string>): string | null {
   return null
 }
 
+/** Masks every client name in a report line. Problem messages quote raw cells and land in public Action logs. */
+function redactClients(text: string, clients: Set<string>): string {
+  let out = text
+  for (const c of clients) {
+    const n = c.trim()
+    if (n.length < 3) continue
+    out = out.replace(new RegExp(`(^|[^a-z0-9])${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?=[^a-z0-9]|$)`, 'gi'), '$1[client name]')
+  }
+  return out
+}
+
 interface Line {
   brand: Brand
   row: number
@@ -276,5 +287,6 @@ export function normalize(raw: RawLine[], clients: Set<string>): NormalizeResult
   }
   const out = [...jobs.values()].filter((j) => j.openings !== 0)
   out.forEach((j) => j.areas.sort((a, b) => a.localeCompare(b)))
-  return { jobs: out.sort((a, b) => (b.postedAt ?? '').localeCompare(a.postedAt ?? '') || a.title.localeCompare(b.title)), problems }
+  const safe = problems.map((p) => ({ ...p, message: redactClients(p.message, clients), ...(p.title ? { title: redactClients(p.title, clients) } : {}), ...(p.key ? { key: redactClients(p.key, clients) } : {}) }))
+  return { jobs: out.sort((a, b) => (b.postedAt ?? '').localeCompare(a.postedAt ?? '') || a.title.localeCompare(b.title)), problems: safe }
 }

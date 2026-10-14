@@ -83,6 +83,16 @@ describe('bad input never reaches the site', () => {
     assert.ok(problems.some((p) => /client's name/.test(p.message)))
   })
 
+  it('masks a client name quoted in any other report line', async () => {
+    const { problems } = await run(ok([
+      { client: 'Acme Retail Corp', status: 'MAYBE', remaining: 3, lines: [['Acme Retail Corp Driver', '', 'Pasig']] },
+      { client: 'Acme Retail Corp', status: 'ACTIVE', remaining: 'lots', lines: [['Acme Retail Corp Helper', '', 'Pasig']] },
+    ]))
+    assert.ok(problems.length >= 2, JSON.stringify(problems))
+    assert.ok(!/acme/i.test(JSON.stringify(problems)), JSON.stringify(problems))
+    assert.ok(problems.some((p) => p.message.includes('[client name]')))
+  })
+
   it('never publishes the sheet\'s qualifications (age, sex, height)', async () => {
     const { feed } = await run(ok([{ status: 'ACTIVE', remaining: 3, lines: [['Driver', '', 'Pasig']] }]))
     assert.ok(!/male|years old|5'5/i.test(JSON.stringify(feed)))
