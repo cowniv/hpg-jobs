@@ -83,6 +83,10 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       `POST /repos/cowniv/hpg-jobs/actions/workflows/sync.yml/dispatches` with a fine-grained token
       (this repo only, Actions: read & write). Keep the GitHub cron as a backup.
       *Needs Jasmin: a cron-job.org account (free) and the token - or pick another timer.*
+      *Code ready (2026-10-14, branch `claude/alerts-and-robot-access`): `workflow_dispatch` was
+      already there, and the existing `concurrency: sync` group (no cancel) keeps the outside timer
+      and the backup cron from overlapping. README "A reliable timer" has the exact cron-job.org +
+      token steps. Remains: only the account, the token and the job.*
 
 ### Sites
 - [x] **7. HPG `/careers` job board** — search, filters, list + detail, Apply mailto, empty state;
@@ -109,9 +113,24 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
 - [ ] **9. Robot access** — Google service account (read-only), sheet shared with it, pipeline
       switched to the Sheets API; then ask the client to set the sheet to Restricted.
       *Needs Jasmin: a Google Cloud project (free).*
+      *Code ready (2026-10-14): with secret `GOOGLE_SA_KEY` the sync signs an RS256 JWT with
+      node:crypto (no new dependency), scope `drive.readonly`, and downloads through the **Drive API
+      export** (`files/{id}/export?mimeType=…spreadsheetml.sheet`) - deliberately NOT the Sheets
+      API: Drive returns the same xlsx as the public link, so `read.ts` and its merged-cell handling
+      are untouched, where the Sheets API returns values + merges in another shape and would need a
+      second reader. Without the key, the public link as before. Remains: the Cloud project, the
+      service account + JSON key, the sheet shared with it (Viewer), then Restricted. Steps in
+      README "What Jasmin needs to set up".*
 - [ ] **10. Alert emails** — on problems, email Jasmin + the client's recruitment lead (who sees
       what is skipped and why). *Needs: the lead's email address, and a sender (Gmail app
       password or Resend free tier).*
+      *Code ready (2026-10-14): `src/alert.ts`. `ALERT_TO` gets held + skipped in recruiter words;
+      `ALERT_TO_TEAM` also gets needs-copy, auto-fixes, the run link, and sync failures
+      (`npm run alert:failure`, a workflow step on failure). On both lists = the team copy only.
+      One fingerprint per audience in `feed/alert-state.json` (sha256, no text): email on change,
+      reminder at most weekly, one all-clear; a failure is followed by "working again". Gmail SMTP
+      (nodemailer) is preferred over Resend: Resend's free tier without a verified domain only
+      reaches the account owner. Remains: the lead's address, a Gmail app password, four secrets.*
 - [x] **11. Client guide** — one page: how a role appears on the site, what is never shown, the
       optional dropdown/number validation to add to the sheet, what the alert emails mean.
       *Done 2026-10-13 as a shareable doc: https://claude.ai/code/artifact/6ce2aab0-f229-477c-bcac-ce78bfd006d5
