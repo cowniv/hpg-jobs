@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict'
+import { mkdtempSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { describe, it } from 'node:test'
-import { decide, deliverFailureAlert, deliverSyncAlerts, emptyState, fingerprint, mailerFromEnv, recipients, REMIND_EVERY_MS, type AlertState, type Findings, type Mail, type Mailer } from '../src/alert.ts'
+import { decide, deliverFailureAlert, deliverSyncAlerts, emptyState, fingerprint, loadState, mailerFromEnv, recipients, REMIND_EVERY_MS, type AlertState, type Findings, type Mail, type Mailer } from '../src/alert.ts'
 import type { Problem } from '../src/types.ts'
 
 const T0 = new Date('2026-10-14T00:00:00.000Z')
@@ -99,6 +102,25 @@ describe('alert emails (task 10)', () => {
     assert.deepEqual(d.state.audiences, {})
     const e = await sync(d.state, { problems: [fixed], needsCopy: [] }, later(REMIND_EVERY_MS + 2 * HOUR), m)
     assert.equal(e.changed, false, 'fixed-only runs never email')
+  })
+
+  it('fingerprint the problem key, not the message, so a row moving does not re-send', async () => {
+    const m = fakeMailer()
+    const at = (row: number): Problem => ({ ...skipped, row, key: 'remaining-nan|dssi|driver|Juan', message: `DSSI tab, row ${row} (Driver): openings left is "Juan".` })
+    const a = await sync(emptyState(), { problems: [at(14)], needsCopy: [] }, T0, m)
+    const b = await sync(a.state, { problems: [at(15)], needsCopy: [] }, later(HOUR), m)
+    assert.equal(b.changed, false)
+    assert.equal(m.sent.length, 2)
+  })
+
+  it('start from empty when the state file is damaged, rather than stop the sync', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'hpg-alert-'))
+    const logs: string[] = []
+    for (const [name, body] of [['conflict.json', '<<<<<<< HEAD\n{}'], ['null.json', 'null'], ['old.json', '{"version":0}']] as const) {
+      writeFileSync(join(dir, name), body)
+      assert.deepEqual(loadState(join(dir, name), (s) => logs.push(s)), emptyState())
+    }
+    assert.equal(logs.length, 3)
   })
 
   it('keep the old state when sending fails, so the next run retries', async () => {

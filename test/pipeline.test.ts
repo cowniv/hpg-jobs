@@ -113,6 +113,18 @@ describe('holding back the last good list', () => {
     assert.equal(feed.jobs.length, good.feed.jobs.length)
   })
 
+  it('gives each problem a key with no row number or live count, so the alert fingerprint survives row edits', async () => {
+    const bad: Block = { status: 'ACTIVE', remaining: 'Juan', lines: [['Driver', '', 'Pasig']] }
+    const filler: Block = { status: 'ACTIVE', remaining: 1, lines: [['Mason', 1, 'Pasig']] }
+    const a = (await run(ok([bad]))).problems.find((x) => x.level === 'skipped')!
+    const b = (await run(ok([filler, bad]))).problems.find((x) => x.level === 'skipped')!
+    assert.notEqual(a.message, b.message, 'the message still names the row')
+    assert.ok(a.key && a.key === b.key)
+    const good = await run(ok(many(6)))
+    const k = (n: number) => run(ok(many(n)), good.feed).then((r) => r.problems.find((x) => x.level === 'held')!.key)
+    assert.equal(await k(2), await k(1), 'a held tab edited further keeps its key')
+  })
+
   it('holds a brand that lost more than half its jobs at once, until a person accepts it', async () => {
     const good = await run(ok(many(6)))
     assert.equal(good.feed.jobs.length, 6)

@@ -1,6 +1,6 @@
 import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
-import { deliverSyncAlerts, ERROR_FILE, loadState, mailerFromEnv, runUrl, saveState } from './alert.ts'
+import { deliverSyncAlerts, emptyState, ERROR_FILE, loadState, mailerFromEnv, runUrl, saveState } from './alert.ts'
 import { loadCopy, type CopyFile } from './copy.ts'
 import { buildFeed, feedProblem, sameContent, type Feed } from './feed.ts'
 import { normalize } from './normalize.ts'
@@ -69,19 +69,31 @@ async function main() {
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, md)
   console.log(md)
 
-  const alerts = await deliverSyncAlerts({
-    env: process.env,
-    state: loadState(),
-    findings: { problems, needsCopy: built.needsCopy, runUrl: runUrl(process.env) },
-    mailer: mailerFromEnv(process.env),
-    now: new Date(),
-  })
-  if (alerts.changed) saveState(alerts.state)
-
-  if (process.env.GITHUB_OUTPUT) {
-    const needsAttention = problems.some((p) => p.level !== 'fixed')
-    appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\nattention=${needsAttention}\nalert_state=${alerts.changed}\n`)
+  // The feed's outputs go first: nothing in the alert code may stop it publishing.
+  const output = (s: string) => {
+    if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, s)
   }
+  output(`changed=${changed}\nattention=${problems.some((p) => p.level !== 'fixed')}\n`)
+
+  let alertState = false
+  try {
+    const mailer = mailerFromEnv(process.env)
+    const alerts = await deliverSyncAlerts({
+      env: process.env,
+      // no sender = nothing to decide, so a damaged state file is not even read
+      state: mailer ? loadState() : emptyState(),
+      findings: { problems, needsCopy: built.needsCopy, runUrl: runUrl(process.env) },
+      mailer,
+      now: new Date(),
+    })
+    if (alerts.changed) {
+      saveState(alerts.state)
+      alertState = true
+    }
+  } catch (e) {
+    console.error(`The alert emails failed; the feed is unaffected: ${e instanceof Error ? e.message : String(e)}`)
+  }
+  output(`alert_state=${alertState}\n`)
 }
 
 main().catch((e: unknown) => {

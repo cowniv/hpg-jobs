@@ -177,7 +177,7 @@ export function normalize(raw: RawLine[], clients: Set<string>): NormalizeResult
     const status = tidy(head.status).toUpperCase()
     if (!OPEN.has(status)) {
       if (!CLOSED.has(status)) {
-        problems.push({ level: 'skipped', brand, row: head.blockRow, title: tidy(head.title), message: `${where} (${tidy(head.title)}): MR STATUS is "${tidy(head.status)}", which the site doesn't recognise. Use ACTIVE, ON HOLD or INACTIVE. Not shown on the site.` })
+        problems.push({ level: 'skipped', brand, row: head.blockRow, title: tidy(head.title), key: `bad-status|${brand}|${titleKey(head.title)}|${tidy(head.status)}`, message: `${where} (${tidy(head.title)}): MR STATUS is "${tidy(head.status)}", which the site doesn't recognise. Use ACTIVE, ON HOLD or INACTIVE. Not shown on the site.` })
       }
       continue
     }
@@ -187,12 +187,12 @@ export function normalize(raw: RawLine[], clients: Set<string>): NormalizeResult
     // openings for the whole block
     const remaining = parseCount(head.remaining)
     if (head.remaining && Number.isNaN(remaining)) {
-      problems.push({ level: 'skipped', brand, row: head.blockRow, title: tidy(head.title), message: `${where} (${tidy(head.title)}): openings left is "${head.remaining}", which isn't a number. Not shown on the site until it is.` })
+      problems.push({ level: 'skipped', brand, row: head.blockRow, title: tidy(head.title), key: `remaining-nan|${brand}|${titleKey(head.title)}|${head.remaining}`, message: `${where} (${tidy(head.title)}): openings left is "${head.remaining}", which isn't a number. Not shown on the site until it is.` })
       continue
     }
     if (!Number.isNaN(remaining) && remaining <= 0) continue // fully filled: closed, not a problem
     if (remaining > MAX_OPENINGS) {
-      problems.push({ level: 'skipped', brand, row: head.blockRow, title: tidy(head.title), message: `${where} (${tidy(head.title)}): ${remaining} openings looks like a typo (more than ${MAX_OPENINGS}). Not shown on the site.` })
+      problems.push({ level: 'skipped', brand, row: head.blockRow, title: tidy(head.title), key: `remaining-big|${brand}|${titleKey(head.title)}`, message: `${where} (${tidy(head.title)}): ${remaining} openings looks like a typo (more than ${MAX_OPENINGS}). Not shown on the site.` })
       continue
     }
 
@@ -222,12 +222,12 @@ export function normalize(raw: RawLine[], clients: Set<string>): NormalizeResult
       else {
         const b = parseCount(l.breakdown)
         if (l.breakdown && Number.isNaN(b)) {
-          problems.push({ level: 'skipped', brand, row: l.row, title, message: `${TAB[brand]} tab, row ${l.row} (${title}): MR BREAKDOWN is "${l.breakdown}", which isn't a number. That line isn't shown.` })
+          problems.push({ level: 'skipped', brand, row: l.row, title, key: `breakdown-nan|${brand}|${titleKey(title)}|${l.breakdown}`, message: `${TAB[brand]} tab, row ${l.row} (${title}): MR BREAKDOWN is "${l.breakdown}", which isn't a number. That line isn't shown.` })
           continue
         }
         openings = Number.isNaN(b) ? null : b
         if (openings != null && openings > MAX_OPENINGS) {
-          problems.push({ level: 'skipped', brand, row: l.row, title, message: `${TAB[brand]} tab, row ${l.row} (${title}): ${openings} openings looks like a typo. That line isn't shown.` })
+          problems.push({ level: 'skipped', brand, row: l.row, title, key: `breakdown-big|${brand}|${titleKey(title)}`, message: `${TAB[brand]} tab, row ${l.row} (${title}): ${openings} openings looks like a typo. That line isn't shown.` })
           continue
         }
         if (openings != null && openings <= 0) continue
@@ -237,7 +237,7 @@ export function normalize(raw: RawLine[], clients: Set<string>): NormalizeResult
         if (hit) {
           // The message names the row and column, never the text or the client: problem
           // reports reach the (public) Action log and the alert email.
-          problems.push({ level: 'skipped', brand, row: l.row, title: text === title ? undefined : title, message: `${TAB[brand]} tab, row ${l.row}: the ${text === title ? 'JOB TITLE' : 'AREA/TEAM'} cell contains a client's name, which must never appear on the site. That line isn't shown.` })
+          problems.push({ level: 'skipped', brand, row: l.row, title: text === title ? undefined : title, key: `client-name|${brand}|${text === title ? 'title' : `area|${titleKey(title)}`}`, message: `${TAB[brand]} tab, row ${l.row}: the ${text === title ? 'JOB TITLE' : 'AREA/TEAM'} cell contains a client's name, which must never appear on the site. That line isn't shown.` })
           skipBlock = text === title
         }
       }

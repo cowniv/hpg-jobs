@@ -152,7 +152,7 @@ export interface Findings {
 }
 
 const lines = (f: Findings, audience: 'recruiters' | 'team') => [
-  ...f.problems.filter((p) => p.level !== 'fixed').map((p) => p.message),
+  ...f.problems.filter((p) => p.level !== 'fixed').map((p) => p.key ?? p.message),
   ...(audience === 'team' ? f.needsCopy.map((n) => `No written job post: ${TAB[n.brand]} - ${n.title}`) : []),
 ]
 
@@ -280,10 +280,20 @@ export function runUrl(env: Env): string | undefined {
   return env.GITHUB_SERVER_URL && env.GITHUB_REPOSITORY && env.GITHUB_RUN_ID ? `${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}` : undefined
 }
 
-export function loadState(path = STATE_FILE): AlertState {
+/**
+ * A damaged state file (a hand edit, conflict markers, a truncated write) must
+ * never stop the feed: start again from empty, which at worst re-sends one email.
+ */
+export function loadState(path = STATE_FILE, log: (s: string) => void = console.log): AlertState {
   if (!existsSync(path)) return emptyState()
-  const s = JSON.parse(readFileSync(path, 'utf8')) as Partial<AlertState>
-  return s.version === 1 && s.audiences ? (s as AlertState) : emptyState()
+  try {
+    const s = JSON.parse(readFileSync(path, 'utf8')) as Partial<AlertState> | null
+    if (s && s.version === 1 && s.audiences && typeof s.audiences === 'object') return s as AlertState
+    log(`${path} is not a version-1 alert state; starting from empty.`)
+  } catch (e) {
+    log(`${path} could not be read (${e instanceof Error ? e.message : String(e)}); starting from empty.`)
+  }
+  return emptyState()
 }
 
 export function saveState(s: AlertState, path = STATE_FILE): void {
