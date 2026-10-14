@@ -1,36 +1,33 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
+import { deliverSyncAlerts, emptyState, ERROR_FILE, loadState, mailerFromEnv, runUrl, saveState } from './alert.ts'
 import { loadCopy, type CopyFile } from './copy.ts'
 import { buildFeed, feedProblem, sameContent, type Feed } from './feed.ts'
 import { normalize } from './normalize.ts'
 import { readWorkbook } from './read.ts'
+import { download } from './source.ts'
 import { BRANDS, TAB, type Brand, type Problem } from './types.ts'
 
 /**
  * npm run sync
  *
  *   MR_SHEET_ID   the Google Sheet id (an Actions secret - never commit it)
+ *   GOOGLE_SA_KEY optional: the read-only service account's JSON key (task 9);
+ *                 without it the sheet's public link is used
  *   MR_XLSX       or: a local .xlsx to read instead (testing)
  *   ACCEPT_DROP   comma-separated brands whose big drop a person has confirmed, e.g. "dssi"
+ *   ALERT_TO, ALERT_TO_TEAM, SMTP_USER + SMTP_PASS or RESEND_API_KEY + ALERT_FROM
+ *                 optional: alert emails (task 10, see alert.ts). Unset = no email.
  *
  * Writes feed/jobs.json only when the jobs actually changed, and report.md
- * (gitignored) for the alert step. A failed download changes nothing: the
- * sites keep reading the last good feed.
+ * (gitignored). Emails the problems when they changed, recording that in
+ * feed/alert-state.json. A failed run changes nothing: the sites keep reading
+ * the last good feed, and the error is left in .cache/sync-error.txt for the
+ * workflow's failure email (alert-failure.ts).
  */
 
 const FEED = 'feed/jobs.json'
 const REPORT = 'report.md'
-
-async function source(): Promise<Buffer> {
-  if (process.env.MR_XLSX) return readFileSync(process.env.MR_XLSX)
-  const id = process.env.MR_SHEET_ID
-  if (!id) throw new Error('Set MR_SHEET_ID (or MR_XLSX for a local file).')
-  const res = await fetch(`https://docs.google.com/spreadsheets/d/${encodeURIComponent(id)}/export?format=xlsx`, { redirect: 'follow' })
-  const type = res.headers.get('content-type') ?? ''
-  // a sheet that is no longer shared answers 200 with a Google sign-in PAGE, not an error
-  if (!res.ok || !type.includes('spreadsheetml')) throw new Error(`Could not download the MR sheet (HTTP ${res.status}, ${type || 'no type'}). Is it still shared "anyone with the link", or has the robot lost access?`)
-  return Buffer.from(await res.arrayBuffer())
-}
 
 function previousFeed(): Feed | null {
   if (!existsSync(FEED)) return null
@@ -53,9 +50,10 @@ function report(problems: Problem[], needsCopy: Array<{ brand: Brand; title: str
 }
 
 async function main() {
+  rmSync(ERROR_FILE, { force: true })
   const copy = loadCopy(JSON.parse(readFileSync('copy/roles.json', 'utf8')) as CopyFile)
   const previous = previousFeed()
-  const read = await readWorkbook(await source())
+  const read = await readWorkbook(await download(process.env))
   const norm = normalize(read.lines, read.clientNames)
   const acceptDrop = (process.env.ACCEPT_DROP ?? '').split(',').map((s) => s.trim().toLowerCase()).filter((s): s is Brand => (BRANDS as readonly string[]).includes(s))
   const built = buildFeed({ jobs: norm.jobs, held: read.held, copy, previous, now: new Date().toISOString(), acceptDrop })
@@ -69,14 +67,43 @@ async function main() {
   const md = report(problems, built.needsCopy, built.feed, changed)
   writeFileSync(REPORT, md)
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, md)
-  if (process.env.GITHUB_OUTPUT) {
-    const needsAttention = problems.some((p) => p.level !== 'fixed')
-    appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\nattention=${needsAttention}\n`)
-  }
   console.log(md)
+
+  // The feed's outputs go first: nothing in the alert code may stop it publishing.
+  const output = (s: string) => {
+    if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, s)
+  }
+  output(`changed=${changed}\nattention=${problems.some((p) => p.level !== 'fixed')}\n`)
+
+  let alertState = false
+  try {
+    const mailer = mailerFromEnv(process.env)
+    const alerts = await deliverSyncAlerts({
+      env: process.env,
+      // no sender = nothing to decide, so a damaged state file is not even read
+      state: mailer ? loadState() : emptyState(),
+      findings: { problems, needsCopy: built.needsCopy, runUrl: runUrl(process.env) },
+      mailer,
+      now: new Date(),
+    })
+    if (alerts.changed) {
+      saveState(alerts.state)
+      alertState = true
+    }
+  } catch (e) {
+    console.error(`The alert emails failed; the feed is unaffected: ${e instanceof Error ? e.message : String(e)}`)
+  }
+  output(`alert_state=${alertState}\n`)
 }
 
 main().catch((e: unknown) => {
-  console.error(e instanceof Error ? e.message : e)
+  const message = e instanceof Error ? e.message : String(e)
+  console.error(message)
+  try {
+    mkdirSync(dirname(ERROR_FILE), { recursive: true })
+    writeFileSync(ERROR_FILE, message + '\n')
+  } catch {
+    // the failure email falls back to a generic message
+  }
   process.exit(1)
 })

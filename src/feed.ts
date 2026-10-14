@@ -111,14 +111,14 @@ export function buildFeed(input: BuildInput): BuildResult {
     const mine = [...fresh.values()].filter((j) => j.brand === brand)
     const before = previous?.jobs.filter((j) => j.brand === brand) ?? []
     const prevState = previous?.brands[brand]
-    const keep = (why?: string) => {
-      if (why) problems.push({ level: 'held', brand, message: why })
+    const keep = (why?: string, key?: string) => {
+      if (why) problems.push({ level: 'held', brand, key, message: why })
       brands[brand] = { state: 'held', jobs: before.length, updatedAt: prevState?.updatedAt ?? null }
       jobs.push(...before)
     }
     if (input.held.includes(brand)) keep() // read.ts already said why
     else if (before.length >= DROP_MIN && mine.length < before.length / 2 && !input.acceptDrop?.includes(brand)) {
-      keep(`${TAB[brand]}: open roles fell from ${before.length} to ${mine.length} in one update. That is usually an accident (rows deleted, a filter or a status changed by mistake), so the site still shows the previous ${before.length}. If the drop is real, run the sync again with "accept drop" for ${TAB[brand]}.`)
+      keep(`${TAB[brand]}: open roles fell from ${before.length} to ${mine.length} in one update. That is usually an accident (rows deleted, a filter or a status changed by mistake), so the site still shows the previous ${before.length}. If the drop is real, run the sync again with "accept drop" for ${TAB[brand]}.`, `big-drop|${brand}`)
     } else {
       brands[brand] = { state: 'live', jobs: mine.length, updatedAt: now }
       jobs.push(...mine)

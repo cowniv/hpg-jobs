@@ -6,6 +6,7 @@
   "description": "Reads the client's MR Google Sheet, validates it, and publishes the clean careers feed the five HPG sites read.",
   "scripts": {
     "sync": "tsx src/sync.ts",
+    "alert:failure": "tsx src/alert-failure.ts",
     "test": "node --import tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -13,10 +14,12 @@
     "node": ">=20"
   },
   "dependencies": {
-    "exceljs": "^4.4.0"
+    "exceljs": "^4.4.0",
+    "nodemailer": "^10.0.13"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
+    "@types/nodemailer": "^8.0.2",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
