@@ -5,7 +5,6 @@
 # required; every other one switches a feature on and is ignored when unset.
 # README "What Jasmin needs to set up" has the steps.
 #   MR_SHEET_ID     the sheet's id - never commit it; this repo is public
-#   GOOGLE_SA_KEY   task 9: read the sheet as the read-only service account
 #   ALERT_TO        task 10: who gets the sheet-problem emails (comma-separated)
 #   ALERT_TO_TEAM   task 10: who also gets the developer detail and failures
 #   SMTP_USER, SMTP_PASS        task 10 sender: Gmail address + app password
@@ -63,7 +62,6 @@ jobs:
         env:
           MR_SHEET_ID: ${{ secrets.MR_SHEET_ID }}
           ACCEPT_DROP: ${{ inputs.accept_drop }}
-          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
           ALERT_TO: ${{ secrets.ALERT_TO }}
           ALERT_TO_TEAM: ${{ secrets.ALERT_TO_TEAM }}
           SMTP_USER: ${{ secrets.SMTP_USER }}

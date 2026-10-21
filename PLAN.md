@@ -16,7 +16,7 @@ changing how they work. Budget context: ₱35k/month retainer, so no CMS, no pai
 | | |
 |---|---|
 | Source | The existing MR sheet. The client keeps editing it as today; no new tabs needed from them. |
-| Access | "Anyone with the link" for now, to build and test. Switch to a read-only Google service account later (task 9), then the client sets the sheet to Restricted. |
+| Access | "Anyone with the link" (view). Confirmed 2026-10-21: the sheet stays public, so no service account (task 9 dropped). |
 | What is live vs written | Live from the sheet: open or not (MR STATUS), openings, area (city/province only), job type, posted date. Written by us once per role title: the job post (summary, responsibilities, what we look for, benefits) and its category. |
 | Never published | Client names, store names, recruiter names, rates, urgency, internal notes, and the sheet's QUALIFICATIONS text (it carries age / sex / height limits — RA 10911). |
 | Apply | Email to the brand's address, role + area + brand in the subject. CVs by email. |
@@ -110,17 +110,12 @@ MR Google Sheet ──(every 30 min)──▶ hpg-jobs pipeline (GitHub Action, 
       (GR8STAFF's muted is 2.52).*
 
 ### Hand-off and hardening
-- [ ] **9. Robot access** — Google service account (read-only), sheet shared with it, pipeline
-      switched to the Sheets API; then ask the client to set the sheet to Restricted.
-      *Needs Jasmin: a Google Cloud project (free).*
-      *Code ready (2026-10-14): with secret `GOOGLE_SA_KEY` the sync signs an RS256 JWT with
-      node:crypto (no new dependency), scope `drive.readonly`, and downloads through the **Drive API
-      export** (`files/{id}/export?mimeType=…spreadsheetml.sheet`) - deliberately NOT the Sheets
-      API: Drive returns the same xlsx as the public link, so `read.ts` and its merged-cell handling
-      are untouched, where the Sheets API returns values + merges in another shape and would need a
-      second reader. Without the key, the public link as before. Remains: the Cloud project, the
-      service account + JSON key, the sheet shared with it (Viewer), then Restricted. Steps in
-      README "What Jasmin needs to set up".*
+- [x] **9. Robot access** — *Not needed (2026-10-21).* The client's MR sheet stays public
+      ("anyone with the link can view"), so the sync reads the public xlsx export with no
+      credentials. The service-account code (`src/google.ts`, `GOOGLE_SA_KEY`) was removed; it is
+      in git history. A private sheet now fails the run with "no longer public" + the failure
+      email. **Open:** the client may still prefer Restricted access - then restore that code and
+      set up the Cloud project + service account.
 - [ ] **10. Alert emails** — on problems, email Jasmin + the client's recruitment lead (who sees
       what is skipped and why). *Needs: the lead's email address, and a sender (Gmail app
       password or Resend free tier).*

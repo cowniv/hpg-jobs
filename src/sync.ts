@@ -12,8 +12,6 @@ import { BRANDS, TAB, type Brand, type Problem } from './types.ts'
  * npm run sync
  *
  *   MR_SHEET_ID   the Google Sheet id (an Actions secret - never commit it)
- *   GOOGLE_SA_KEY optional: the read-only service account's JSON key (task 9);
- *                 without it the sheet's public link is used
  *   MR_XLSX       or: a local .xlsx to read instead (testing)
  *   ACCEPT_DROP   comma-separated brands whose big drop a person has confirmed, e.g. "dssi"
  *   ALERT_TO, ALERT_TO_TEAM, SMTP_USER + SMTP_PASS or RESEND_API_KEY + ALERT_FROM

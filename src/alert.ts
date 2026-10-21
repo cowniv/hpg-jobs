@@ -203,7 +203,7 @@ export function failureEmail(kind: Exclude<Kind, 'none'>, error: string, track: 
     `Error: ${error}`,
     '',
     'The websites are not affected beyond going stale: they keep showing the last good job list until a sync succeeds.',
-    'Usual causes: the sheet was unshared or its sharing changed (Google then answers with a sign-in page), the robot account lost access, or a secret is wrong.',
+    'Usual causes: the sheet is no longer "anyone with the link" (Google then answers with a sign-in page), the sheet was moved or deleted, or a secret is wrong.',
     ...(runUrl ? ['', `Run: ${runUrl}`] : []),
   ]
   return { subject: kind === 'reminder' ? '[hpg-jobs] Reminder: the sync is still failing' : '[hpg-jobs] The sync could not run', text: text.join('\n') }

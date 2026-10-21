@@ -20,7 +20,6 @@ skipped and reported (the report names the row, never the client).
 npm install
 MR_XLSX=path/to/export.xlsx npm run sync     # a local export
 MR_SHEET_ID=<id> npm run sync                # the live sheet (an Actions secret - never commit it)
-MR_SHEET_ID=<id> GOOGLE_SA_KEY="$(cat key.json)" npm run sync   # as the robot account (task 9)
 ACCEPT_DROP=dssi npm run sync                # confirm a big drop the guard held back
 npm test                                     # fixture sheets: merges, bad numbers, renamed columns, leaks, drops
 npm run typecheck
@@ -47,8 +46,7 @@ src/read.ts       xlsx -> raw lines (merged cells, columns found by header name)
 src/normalize.ts  validate + clean -> jobs, plus the problem list
 src/copy.ts       loads + checks copy/roles.json
 src/feed.ts       jobs + copy -> feed, the hold and big-drop guards
-src/source.ts     where the xlsx comes from: local file, robot account, or public link
-src/google.ts     service-account sign-in (a signed JWT, node:crypto only)
+src/source.ts     where the xlsx comes from: local file or the sheet's public link
 src/alert.ts      the alert emails: who gets what, when, and the words
 src/alert-failure.ts  npm run alert:failure - the workflow's "sync failed" email
 src/sync.ts       the command: download, run, write feed + report, send alerts
@@ -58,13 +56,18 @@ feed/alert-state.json  which problem lists were already emailed (sha256 hashes o
 test/             fixture workbooks built in code
 ```
 
-## Reading the sheet as a robot (task 9)
+## Reading the sheet
 
-With the secret `GOOGLE_SA_KEY` set, the sync signs in as a read-only Google service account and
-downloads the sheet through the **Drive API export** - the same xlsx file the public link gives,
-so nothing about how the sheet is read changes. Without the key it uses the public link, as
-before. Once the robot works, the client can set the sheet to **Restricted** (only people and
-the robot it is shared with). The key and the sign-in token are never written to the log.
+The sheet stays **"anyone with the link can view"** (decided 2026-10-21), so the sync downloads its
+public xlsx export with no Google account or key. One xlsx for the whole workbook rather than a
+CSV per tab, because CSV loses the merged cells `read.ts` uses to find each request.
+
+- Sheet made private: the run fails with "the sheet is no longer public" and the failure email
+  goes out; the sites keep the last good list. Fix: Share > General access > Anyone with the link.
+- A tab renamed or deleted: that brand is held (last good list kept) and reported.
+
+Open question: the client may still prefer the sheet Restricted. That needs a read-only Google
+service account again; the code for it is in git history (`src/google.ts`, removed 2026-10-21).
 
 ## Alert emails (task 10)
 
@@ -133,21 +136,6 @@ be slowed to `'7 */2 * * *'` in `.github/workflows/sync.yml`; it is not needed e
 All of this is already coded; each piece switches on the moment its secrets exist. Secrets go in
 GitHub: this repo > Settings > Secrets and variables > Actions > **New repository secret**. After
 adding them, run the workflow by hand (Actions > sync > Run workflow) and read its log.
-
-**Task 9 - robot access.** Secret: `GOOGLE_SA_KEY`.
-
-1. <https://console.cloud.google.com> > project picker > **New project** (`hpg-jobs`; no billing).
-2. APIs & Services > Library > **Google Drive API** > Enable.
-3. IAM & Admin > Service accounts > **Create service account** (`hpg-jobs-reader`). Skip the
-   optional role and user-access steps - it needs no project role.
-4. Open it > Keys > Add key > Create new key > **JSON**. A `.json` file downloads. Keep it out of
-   every repo, and delete the local copy once it is pasted.
-5. Copy the service account's email (`hpg-jobs-reader@<project>.iam.gserviceaccount.com`). In the
-   MR sheet: Share > paste that email > **Viewer** > untick "Notify people" > Share. (If the
-   client owns the sheet, they do this step.)
-6. Add the secret `GOOGLE_SA_KEY` = the whole contents of the JSON file, `{` to `}`.
-7. Run the workflow; the log should say "Reading the sheet as the robot account". Then ask the
-   client to set the sheet's General access to **Restricted**, and run it once more.
 
 **Task 10 - alert emails.** Secrets: `ALERT_TO`, `ALERT_TO_TEAM`, `SMTP_USER`, `SMTP_PASS`.
 
