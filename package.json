@@ -7,6 +7,7 @@
   "scripts": {
     "sync": "tsx src/sync.ts",
     "alert:failure": "tsx src/alert-failure.ts",
+    "alert:test": "tsx src/alert-test.ts",
     "test": "node --import tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
   },
