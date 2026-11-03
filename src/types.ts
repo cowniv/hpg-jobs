@@ -41,5 +41,11 @@ export interface Problem {
   brand: Brand
   row?: number
   title?: string
+  /**
+   * What the problem IS, without the row number or a live count, so the alert
+   * fingerprint (alert.ts) does not change when a row is inserted above it or a
+   * held tab is edited. Falls back to `message` when unset.
+   */
+  key?: string
   message: string
 }

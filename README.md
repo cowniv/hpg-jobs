@@ -46,8 +46,108 @@ src/read.ts       xlsx -> raw lines (merged cells, columns found by header name)
 src/normalize.ts  validate + clean -> jobs, plus the problem list
 src/copy.ts       loads + checks copy/roles.json
 src/feed.ts       jobs + copy -> feed, the hold and big-drop guards
-src/sync.ts       the command: download, run, write feed + report
+src/source.ts     where the xlsx comes from: local file or the sheet's public link
+src/alert.ts      the alert emails: who gets what, when, and the words
+src/alert-failure.ts  npm run alert:failure - the workflow's "sync failed" email
+src/sync.ts       the command: download, run, write feed + report, send alerts
 copy/roles.json   the written job posts
 feed/jobs.json    THE OUTPUT - public, read by the sites
+feed/alert-state.json  which problem lists were already emailed (sha256 hashes only)
 test/             fixture workbooks built in code
 ```
+
+## Reading the sheet
+
+The sheet stays **"anyone with the link can view"** (decided 2026-10-21), so the sync downloads its
+public xlsx export with no Google account or key. One xlsx for the whole workbook rather than a
+CSV per tab, because CSV loses the merged cells `read.ts` uses to find each request.
+
+- Sheet made private: the run fails with "the sheet is no longer public" and the failure email
+  goes out; the sites keep the last good list. Fix: Share > General access > Anyone with the link.
+- A tab renamed or deleted: that brand is held (last good list kept) and reported.
+
+Open question: the client may still prefer the sheet Restricted. That needs a read-only Google
+service account again; the code for it is in git history (`src/google.ts`, removed 2026-10-21).
+
+## Alert emails (task 10)
+
+After every sync, if something keeps roles off the sites - a tab held back, a row skipped - an
+email says which tab, which row and what to change. Nobody is emailed every 30 minutes about the
+same thing:
+
+- an email goes out when the list of problems **changes**;
+- while it stays the same, a **reminder** at most once every 7 days;
+- when it goes from some problems to none, one **"all clear"**.
+
+`feed/alert-state.json` remembers what was sent, as a sha256 of the problem lines (no text - this
+repo is public). Automatic fixes never trigger an email on their own.
+
+| Secret | Gets |
+|---|---|
+| `ALERT_TO` | the problems, in recruiter language (Jasmin + the client's recruitment lead) |
+| `ALERT_TO_TEAM` | the same, plus roles with no written post, the automatic fixes, a link to the run, and an email when the sync itself fails (Jasmin) |
+
+Anyone on both lists gets the team email only, once. Problem lines never contain a client name.
+
+**Sender**: Gmail (`SMTP_USER` + `SMTP_PASS`) or Resend (`RESEND_API_KEY` + `ALERT_FROM`); Gmail
+wins if both are set. **Use Gmail to reach the client**: Resend's free tier, without a domain
+verified with them, only delivers to the Resend account's own email address, so the recruitment
+lead would never get anything. With no sender or no recipients the sync logs one line ("Alert
+emails are off") and behaves exactly as it did before.
+
+If the sync itself fails (sheet unshared, a sign-in page instead of the file, a bad secret), the
+workflow's failure step runs `npm run alert:failure`: `ALERT_TO_TEAM` hears once per distinct
+error (then weekly), and gets "working again" after the next good run.
+
+## A reliable timer (task 6b)
+
+GitHub runs a free repo's schedule when it gets round to it - twice in 23 hours, once. So an
+outside timer starts the workflow every 30 minutes, and the GitHub schedule stays as a backup. The
+workflow's `concurrency` group means the two can never run at the same time: a run that arrives
+while one is going waits, and GitHub keeps at most one waiting (a newer arrival replaces it, which
+shows as a cancelled run - harmless). The outside timer fires at :00/:30 and the backup at :07/:37,
+so they do not collide. Once the outside timer has run reliably for a week or two, the backup can
+be slowed to `'7 */2 * * *'` in `.github/workflows/sync.yml`; it is not needed every 30 minutes.
+
+1. **Make a token.** GitHub > Settings > Developer settings > Personal access tokens >
+   **Fine-grained tokens** > Generate new token. Name `cron-job.org hpg-jobs`; expiration: the
+   longest offered (put its renewal in your calendar); Repository access: **Only select
+   repositories** > `cowniv/hpg-jobs`; Permissions > Repository permissions > **Actions: Read and
+   write**, nothing else. Generate and copy the token.
+2. **Make the job.** Sign up free at <https://cron-job.org> > Create cronjob:
+   - Title: `hpg-jobs sync`
+   - URL: `https://api.github.com/repos/cowniv/hpg-jobs/actions/workflows/sync.yml/dispatches`
+   - Schedule: every 30 minutes (custom: minutes `0,30` of every hour). Not `7,37`: that is the
+     backup's slot, and the two would land together and run back to back for nothing.
+   - Advanced > Request method: **POST**
+   - Headers:
+     - `Accept: application/vnd.github+json`
+     - `Authorization: Bearer <the token>`
+     - `X-GitHub-Api-Version: 2022-11-28`
+     - `Content-Type: application/json`
+   - Request body: `{"ref":"main"}`
+3. **Test it** with cron-job.org's "Test run": expect **HTTP 204** (no content), and a new "sync"
+   run in this repo's Actions tab marked `workflow_dispatch`. 401/403 = the token is wrong or lacks
+   Actions write; 404 = the URL or the token's repository access; 422 = the body.
+4. Turn on cron-job.org's "notify me on failure" for the job.
+
+## What Jasmin needs to set up
+
+All of this is already coded; each piece switches on the moment its secrets exist. Secrets go in
+GitHub: this repo > Settings > Secrets and variables > Actions > **New repository secret**. After
+adding them, run the workflow by hand (Actions > sync > Run workflow) and read its log.
+
+**Task 10 - alert emails.** Secrets: `ALERT_TO`, `ALERT_TO_TEAM`, `SMTP_USER`, `SMTP_PASS`.
+
+1. Pick the Gmail account that sends (a dedicated one, such as a new job-board Gmail, is tidier
+   than a personal one).
+2. Turn on **2-Step Verification** for it: <https://myaccount.google.com/security>.
+3. Create an **app password**: <https://myaccount.google.com/apppasswords>, name `hpg-jobs`. Copy
+   the 16 characters.
+4. Secrets: `SMTP_USER` = that Gmail address; `SMTP_PASS` = the app password; `ALERT_TO` = your
+   address and the recruitment lead's, comma-separated; `ALERT_TO_TEAM` = your address.
+5. (Instead of Gmail: `RESEND_API_KEY` + `ALERT_FROM`, e.g. `HPG job board <onboarding@resend.dev>`
+   - but see "Sender" above: without a verified domain it can only reach you.)
+
+**Task 6b - reliable timer.** No repo secrets: the token lives in cron-job.org. Follow "A reliable
+timer" above - a fine-grained token (this repo only, Actions read & write) and a cron-job.org job.

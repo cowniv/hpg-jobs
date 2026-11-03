@@ -87,7 +87,7 @@ export async function readWorkbook(buf: ArrayBuffer | Buffer): Promise<ReadResul
     const ws = wb.getWorksheet(TAB[brand])
     if (!ws) {
       held.push(brand)
-      problems.push({ level: 'held', brand, message: `The "${TAB[brand]}" tab is missing from the sheet (renamed or deleted?). Showing the last good list for ${TAB[brand]}.` })
+      problems.push({ level: 'held', brand, key: `tab-missing|${brand}`, message: `The "${TAB[brand]}" tab is missing from the sheet (renamed or deleted?). Showing the last good list for ${TAB[brand]}.` })
       continue
     }
 
@@ -105,6 +105,7 @@ export async function readWorkbook(buf: ArrayBuffer | Buffer): Promise<ReadResul
       problems.push({
         level: 'held',
         brand,
+        key: `columns-missing|${brand}|${missing.join(',')}`,
         message: `The ${TAB[brand]} tab is missing column(s) the site needs: ${missing.map(niceField).join(', ')}. A column may have been renamed or deleted. Showing the last good list for ${TAB[brand]} until it is fixed.`,
       })
       continue
